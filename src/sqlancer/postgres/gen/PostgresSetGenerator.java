@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 import sqlancer.Randomly;
+import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.postgres.PostgresGlobalState;
 
@@ -113,6 +114,7 @@ public final class PostgresSetGenerator {
         JOIN_COLLAPSE_LIMIT("join_collapse_limit", (r) -> r.getInteger(1, Integer.MAX_VALUE)),
         PARALLEL_LEADER_PARTICIPATION("parallel_leader_participation", (r) -> Randomly.fromOptions(1, 0)),
         FORCE_PARALLEL_MODE("force_parallel_mode", (r) -> Randomly.fromOptions("off", "on", "regress")),
+        DEBUG_PARALLEL_QUERY("debug_parallel_query", (r) -> Randomly.fromOptions("off", "on", "regress")),
         PLAN_CACHE_MODE("plan_cache_mode",
                 (r) -> Randomly.fromOptions("auto", "force_generic_plan", "force_custom_plan"));
 
@@ -126,6 +128,7 @@ public final class PostgresSetGenerator {
     }
 
     public static SQLQueryAdapter create(PostgresGlobalState globalState) {
+        ExpectedErrors errors = new ExpectedErrors();
         StringBuilder sb = new StringBuilder();
         ArrayList<ConfigurationOption> options = new ArrayList<>(Arrays.asList(ConfigurationOption.values()));
         options.remove(ConfigurationOption.DEFAULT_WITH_OIDS);
@@ -136,6 +139,8 @@ public final class PostgresSetGenerator {
             sb.append(" ");
         }
         sb.append(option.optionName);
+        errors.add("unrecognized configuration parameter \"force_parallel_mode\"");
+        errors.add("unrecognized configuration parameter \"debug_parallel_query\"");
         sb.append("=");
         if (Randomly.getBoolean()) {
             sb.append("DEFAULT");
