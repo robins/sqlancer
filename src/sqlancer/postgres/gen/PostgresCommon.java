@@ -246,6 +246,7 @@ public final class PostgresCommon {
             ArrayList<StorageParameters> values = new ArrayList<>(Arrays.asList(StorageParameters.values()));
             values.remove(StorageParameters.OIDS);
             errors.add("unrecognized parameter");
+            errors.add("cannot specify storage parameters for a partitioned table");
             errors.add("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables");
             List<StorageParameters> subset = Randomly.nonEmptySubset(values);
             int i = 0;
