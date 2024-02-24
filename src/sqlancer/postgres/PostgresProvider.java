@@ -288,7 +288,7 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
     }
 
     protected void readFunctions(PostgresGlobalState globalState) throws SQLException {
-        SQLQueryAdapter query = new SQLQueryAdapter("SELECT proname, provolatile FROM pg_proc;");
+        SQLQueryAdapter query = new SQLQueryAdapter("SELECT proname, provolatile FROM pg_proc where has_function_privilege(oid, 'execute');");
         SQLancerResultSet rs = query.executeAndGet(globalState);
         while (rs.next()) {
             String functionName = rs.getString(1);
