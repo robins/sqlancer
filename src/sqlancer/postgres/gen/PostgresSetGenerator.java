@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 import sqlancer.Randomly;
+import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.postgres.PostgresGlobalState;
 
@@ -126,11 +127,13 @@ public final class PostgresSetGenerator {
     }
 
     public static SQLQueryAdapter create(PostgresGlobalState globalState) {
+        ExpectedErrors errors = new ExpectedErrors();
         StringBuilder sb = new StringBuilder();
         ArrayList<ConfigurationOption> options = new ArrayList<>(Arrays.asList(ConfigurationOption.values()));
         options.remove(ConfigurationOption.DEFAULT_WITH_OIDS);
         ConfigurationOption option = Randomly.fromList(options);
         sb.append("SET ");
+        errors.add("unrecognized configuration parameter");
         if (Randomly.getBoolean()) {
             sb.append(Randomly.fromOptions("SESSION", "LOCAL"));
             sb.append(" ");
@@ -142,7 +145,7 @@ public final class PostgresSetGenerator {
         } else {
             sb.append(option.op.apply(globalState.getRandomly()));
         }
-        return new SQLQueryAdapter(sb.toString());
+        return new SQLQueryAdapter(sb.toString(), errors);
     }
 
 }

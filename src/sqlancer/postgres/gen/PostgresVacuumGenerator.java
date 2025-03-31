@@ -58,6 +58,7 @@ public final class PostgresVacuumGenerator {
             }
         }
         ExpectedErrors errors = new ExpectedErrors();
+        errors.add("VACUUM FULL cannot be performed in parallel");
         errors.add("VACUUM cannot run inside a transaction block");
         errors.add("deadlock"); /*
                                  * "FULL" commented out due to https://www.postgresql.org/message-id/CA%2Bu7OA6pL%
