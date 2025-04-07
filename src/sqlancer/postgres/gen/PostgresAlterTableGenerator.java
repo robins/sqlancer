@@ -206,6 +206,7 @@ public class PostgresAlterTableGenerator {
                     sb.append("DROP NOT NULL");
                     errors.add("is in a primary key");
                     errors.add("is an identity column");
+                    errors.add("cannot drop inherited constraint");
                 }
                 break;
             case ALTER_COLUMN_SET_STATISTICS:
@@ -339,6 +340,9 @@ public class PostgresAlterTableGenerator {
                 errors.add("because it is temporary");
                 errors.add("to logged because it references unlogged table");
                 errors.add("to unlogged because it references logged table");
+                errors.add("ALTER action SET LOGGED cannot be performed on relation");
+                errors.add("ALTER action SET UNLOGGED cannot be performed on relation");
+                errors.add("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables");
                 break;
             case NOT_OF:
                 errors.add("is not a typed table");
