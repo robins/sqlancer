@@ -207,6 +207,7 @@ public class PostgresAlterTableGenerator {
                     errors.add("is in a primary key");
                     errors.add("is an identity column");
                     errors.add("cannot drop inherited constraint");
+                    errors.add("is in index used as replica identity");
                 }
                 break;
             case ALTER_COLUMN_SET_STATISTICS:
