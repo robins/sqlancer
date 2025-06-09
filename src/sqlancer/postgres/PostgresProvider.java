@@ -281,7 +281,8 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
         globalState.getState().logStatement(String.format("\\c %s;", entryDatabaseName));
         
         String dropCommand = "DROP DATABASE";
-        if (Randomly.getBoolean()) {
+        boolean forceDrop = Randomly.getBoolean();
+        if (forceDrop) {
             dropCommand += " FORCE";
         }
         dropCommand += " IF EXISTS " + databaseName;
@@ -291,7 +292,7 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
             s.execute(dropCommand);
         } catch (SQLException e) {
             // If force fails, fall back to regular drop
-            if (dropCommand.contains("FORCE")) {
+            if (forceDrop) {
                 String fallbackDrop = "DROP DATABASE IF EXISTS " + databaseName;
                 globalState.getState().logStatement(fallbackDrop + ";");
                 try (Statement s = con.createStatement()) {
