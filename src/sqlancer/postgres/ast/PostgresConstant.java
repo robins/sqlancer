@@ -594,4 +594,28 @@ public abstract class PostgresConstant implements PostgresExpression {
         return new InetConstant(val);
     }
 
+    public static PostgresConstant createUUIDConstant() {
+        return new PostgresUUIDConstant(java.util.UUID.randomUUID());
+    }
+
+    public static class PostgresUUIDConstant extends PostgresConstantBase {
+
+        private final java.util.UUID value;
+
+        public PostgresUUIDConstant(java.util.UUID value) {
+            this.value = value;
+        }
+
+        @Override
+        public String getTextRepresentation() {
+            return "'" + value.toString() + "'::uuid";
+        }
+
+        @Override
+        public PostgresDataType getExpressionType() {
+            return PostgresDataType.UUID;
+        }
+
+    }
+
 }

@@ -31,7 +31,7 @@ public class PostgresSchema extends AbstractSchema<PostgresGlobalState, Postgres
     private final String databaseName;
 
     public enum PostgresDataType {
-        INT, BOOLEAN, TEXT, DECIMAL, FLOAT, REAL, RANGE, MONEY, BIT, INET;
+        INT, BOOLEAN, TEXT, DECIMAL, FLOAT, REAL, RANGE, MONEY, BIT, INET, UUID;
 
         public static PostgresDataType getRandomType() {
             List<PostgresDataType> dataTypes = new ArrayList<>(Arrays.asList(values()));
@@ -43,6 +43,7 @@ public class PostgresSchema extends AbstractSchema<PostgresGlobalState, Postgres
                 dataTypes.remove(PostgresDataType.RANGE);
                 dataTypes.remove(PostgresDataType.MONEY);
                 dataTypes.remove(PostgresDataType.BIT);
+                dataTypes.remove(PostgresDataType.UUID);
             }
             return Randomly.fromList(dataTypes);
         }
@@ -141,6 +142,8 @@ public class PostgresSchema extends AbstractSchema<PostgresGlobalState, Postgres
             return PostgresDataType.BIT;
         case "inet":
             return PostgresDataType.INET;
+        case "uuid":
+            return PostgresDataType.UUID;
         default:
             throw new AssertionError(typeString);
         }

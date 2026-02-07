@@ -53,6 +53,12 @@ public final class PostgresRandomQueryGenerator {
                 select.setOffsetClause(
                         PostgresConstant.createIntConstant(Randomly.getPositiveOrZeroNonCachedInteger()));
             }
+            if (Randomly.getBoolean() && !select.getOrderByClauses().isEmpty()) {
+                select.setFetchFirst(true);
+                if (Randomly.getBoolean()) {
+                    select.setWithTies(true);
+                }
+            }
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
             select.setForClause(ForClause.getRandom());

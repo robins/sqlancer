@@ -317,6 +317,9 @@ public final class PostgresCommon {
         case INET:
             sb.append("inet");
             break;
+        case UUID:
+            sb.append("uuid");
+            break;
         default:
             throw new AssertionError(type);
         }

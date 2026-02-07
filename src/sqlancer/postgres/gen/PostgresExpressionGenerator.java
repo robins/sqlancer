@@ -344,6 +344,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
             case FLOAT:
             case MONEY:
             case INET:
+            case UUID:
                 return generateConstant(r, dataType);
             case BIT:
                 return generateBitExpression(depth);
@@ -365,6 +366,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         case RANGE:
         case REAL:
         case INET:
+        case UUID:
             return PostgresCompoundDataType.create(type);
         case TEXT: // TODO
         case BIT:
@@ -604,6 +606,8 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
             return PostgresConstant.createInetConstant(getRandomInet(r));
         case BIT:
             return PostgresConstant.createBitConstant(r.getInteger());
+        case UUID:
+            return PostgresConstant.createUUIDConstant();
         default:
             throw new AssertionError(type);
         }
