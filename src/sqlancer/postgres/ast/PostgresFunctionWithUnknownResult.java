@@ -32,7 +32,7 @@ public enum PostgresFunctionWithUnknownResult {
     // INET_SERVER_PORT("inet_server_port", PostgresDataType.INT),
     PG_BACKEND_PID("pg_backend_pid", PostgresDataType.INT),
     PG_CURRENT_LOGFILE("pg_current_logfile", PostgresDataType.TEXT),
-    PG_IS_OTHER_TEMP_SCHEMA("pg_is_other_temp_schema", PostgresDataType.BOOLEAN),
+    PG_IS_OTHER_TEMP_SCHEMA("pg_is_other_temp_schema", PostgresDataType.BOOLEAN, PostgresDataType.INT),
     PG_JIT_AVAILABLE("pg_jit_available", PostgresDataType.BOOLEAN),
     PG_NOTIFICATION_QUEUE_USAGE("pg_notification_queue_usage", PostgresDataType.REAL),
     PG_TRIGGER_DEPTH("pg_trigger_depth", PostgresDataType.INT), VERSION("version", PostgresDataType.TEXT),
@@ -80,7 +80,7 @@ public enum PostgresFunctionWithUnknownResult {
     RIGHT("right", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT),
     RPAD("rpad", PostgresDataType.TEXT, PostgresDataType.INT, PostgresDataType.TEXT),
     RTRIM("rtrim", PostgresDataType.TEXT, PostgresDataType.TEXT),
-    SPLIT_PART("split_part", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT),
+    SPLIT_PART("split_part", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT),
     STRPOS("strpos", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.TEXT),
     SUBSTR("substr", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.INT, PostgresDataType.INT),
     TO_ASCII("to_ascii", PostgresDataType.TEXT, PostgresDataType.TEXT),
@@ -159,7 +159,7 @@ public enum PostgresFunctionWithUnknownResult {
     // https://www.postgresql.org/docs/14/functions-string.html
     UNISTR("unistr", PostgresDataType.TEXT, PostgresDataType.TEXT),
     // https://www.postgresql.org/docs/14/functions-bitstring.html
-    BIT_XOR("bit_xor", PostgresDataType.INT, PostgresDataType.INT),
+
 
     // PostgreSQL 15 functions
     // https://www.postgresql.org/docs/15/functions-matching.html#FUNCTIONS-POSIX-REGEXP

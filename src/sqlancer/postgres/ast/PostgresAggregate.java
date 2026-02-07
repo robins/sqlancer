@@ -20,7 +20,8 @@ public class PostgresAggregate extends FunctionNode<PostgresAggregateFunction, P
         BIT_AND(PostgresDataType.INT), BIT_OR(PostgresDataType.INT), BOOL_AND(PostgresDataType.BOOLEAN),
         BOOL_OR(PostgresDataType.BOOLEAN), COUNT(PostgresDataType.INT), EVERY(PostgresDataType.BOOLEAN), MAX, MIN,
         // STRING_AGG
-        SUM(PostgresDataType.INT, PostgresDataType.FLOAT, PostgresDataType.REAL, PostgresDataType.DECIMAL);
+        SUM(PostgresDataType.INT, PostgresDataType.FLOAT, PostgresDataType.REAL, PostgresDataType.DECIMAL),
+        BIT_XOR(PostgresDataType.INT);
 
         private PostgresDataType[] supportedReturnTypes;
 

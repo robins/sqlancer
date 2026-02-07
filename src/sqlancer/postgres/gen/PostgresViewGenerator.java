@@ -86,6 +86,7 @@ public final class PostgresViewGenerator {
         errors.add("cannot change data type of view column");
         errors.add("specified more than once"); // TODO
         errors.add("materialized views must not use temporary tables or views");
+        errors.add("materialized views must not use temporary objects");
         errors.add("does not have the form non-recursive-term UNION [ALL] recursive-term");
         errors.add("is not a view");
         errors.add("non-integer constant in DISTINCT ON");
