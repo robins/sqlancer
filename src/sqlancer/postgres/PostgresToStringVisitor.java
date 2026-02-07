@@ -167,6 +167,9 @@ public final class PostgresToStringVisitor extends ToStringVisitor<PostgresExpre
         }
         if (!s.getGroupByExpressions().isEmpty()) {
             sb.append(" GROUP BY ");
+            if (s.isGroupByDistinct()) {
+                sb.append("DISTINCT ");
+            }
             visit(s.getGroupByExpressions());
         }
         if (s.getHavingClause() != null) {
