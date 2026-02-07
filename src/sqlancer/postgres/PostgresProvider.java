@@ -144,6 +144,9 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
 
     protected static int mapActions(PostgresGlobalState globalState, Action a) {
         Randomly r = globalState.getRandomly();
+        if (globalState.getOptions().isHealthCheck()) {
+            return 1;
+        }
         int nrPerformed;
         switch (a) {
         case CREATE_INDEX:
@@ -210,6 +213,9 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
 
     @Override
     public void generateDatabase(PostgresGlobalState globalState) throws Exception {
+        if (globalState.getOptions().isHealthCheck()) {
+            globalState.setHealthCheckStrategy(new PostgresHealthCheckStrategy(globalState.getOptions()));
+        }
         readFunctions(globalState);
         createTables(globalState, Randomly.fromOptions(4, 5, 6));
         prepareTables(globalState);
@@ -294,10 +300,15 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
             s.execute(createDatabaseCommand);
         }
         con.close();
-        int databaseIndex = entryURL.indexOf(entryDatabaseName);
-        String preDatabaseName = entryURL.substring(0, databaseIndex);
-        String postDatabaseName = entryURL.substring(databaseIndex + entryDatabaseName.length());
-        testURL = preDatabaseName + databaseName + postDatabaseName;
+        try {
+            URI uri = new URI(entryURL);
+            testURL = String.format("%s://%s:%d/%s", uri.getScheme(), host, port, databaseName);
+            if (uri.getQuery() != null) {
+                testURL += "?" + uri.getQuery();
+            }
+        } catch (URISyntaxException e) {
+             throw new AssertionError(e);
+        }
         globalState.getState().logStatement(String.format("\\c %s;", databaseName));
 
         con = DriverManager.getConnection("jdbc:" + testURL, username, password);

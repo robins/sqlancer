@@ -43,6 +43,36 @@ public final class PostgresCommon {
         errors.addAll(getCommonFetchErrors());
     }
 
+    public static <T> T selectOption(PostgresGlobalState globalState, List<T> options) {
+        if (globalState.getOptions().isHealthCheck() && globalState.getHealthCheckStrategy() != null) {
+            return globalState.getHealthCheckStrategy().selectOption(options);
+        } else {
+            return Randomly.fromList(options);
+        }
+    }
+
+    @SafeVarargs
+    public static <T> T selectOption(PostgresGlobalState globalState, T... options) {
+         return selectOption(globalState, Arrays.asList(options));
+    }
+
+    public static <T> List<T> selectSubset(PostgresGlobalState globalState, List<T> options) {
+        if (globalState.getOptions().isHealthCheck()) {
+            return new ArrayList<>(options);
+        } else {
+            return Randomly.nonEmptySubset(options);
+        }
+    }
+
+    @SafeVarargs
+    public static <T> List<T> selectSubset(PostgresGlobalState globalState, T... options) {
+        if (globalState.getOptions().isHealthCheck()) {
+            return new ArrayList<>(Arrays.asList(options));
+        } else {
+            return Randomly.nonEmptySubset(options);
+        }
+    }
+
     public static List<String> getCommonTableErrors() {
         ArrayList<String> errors = new ArrayList<>();
 
@@ -224,7 +254,7 @@ public final class PostgresCommon {
     }
 
     public static boolean appendDataType(PostgresDataType type, StringBuilder sb, boolean allowSerial,
-            boolean generateOnlyKnown, List<String> opClasses) throws AssertionError {
+            boolean generateOnlyKnown, PostgresGlobalState globalState) throws AssertionError {
         boolean serial = false;
         switch (type) {
         case BOOLEAN:
@@ -233,9 +263,9 @@ public final class PostgresCommon {
         case INT:
             if (Randomly.getBoolean() && allowSerial) {
                 serial = true;
-                sb.append(Randomly.fromOptions("serial", "bigserial"));
+                sb.append(selectOption(globalState, "serial", "bigserial"));
             } else {
-                sb.append(Randomly.fromOptions("smallint", "integer", "bigint"));
+                sb.append(selectOption(globalState, "smallint", "integer", "bigint"));
             }
             break;
         case TEXT:
@@ -256,7 +286,7 @@ public final class PostgresCommon {
             if (Randomly.getBoolean() && !PostgresProvider.generateOnlyKnown) {
                 sb.append(" COLLATE ");
                 sb.append('"');
-                sb.append(Randomly.fromList(opClasses));
+                sb.append(selectOption(globalState, globalState.getCollates()));
                 sb.append('"');
             }
             break;
@@ -270,7 +300,7 @@ public final class PostgresCommon {
             sb.append("FLOAT");
             break;
         case RANGE:
-            sb.append(Randomly.fromOptions("int4range", "int4range")); // , "int8range", "numrange"
+            sb.append(selectOption(globalState, "int4range", "int4range")); // , "int8range", "numrange"
             break;
         case MONEY:
             sb.append("money");
@@ -332,7 +362,7 @@ public final class PostgresCommon {
             values.remove(StorageParameters.OIDS);
             errors.add("unrecognized parameter");
             errors.add("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables");
-            List<StorageParameters> subset = Randomly.nonEmptySubset(values);
+            List<StorageParameters> subset = selectSubset(globalState, values);
             int i = 0;
             for (StorageParameters parameter : subset) {
                 if (i++ != 0) {
@@ -349,7 +379,7 @@ public final class PostgresCommon {
     public static void addTableConstraints(boolean excludePrimaryKey, StringBuilder sb, PostgresTable table,
             PostgresGlobalState globalState, ExpectedErrors errors) {
         // TODO constraint name
-        List<TableConstraints> tableConstraints = Randomly.nonEmptySubset(TableConstraints.values());
+        List<TableConstraints> tableConstraints = selectSubset(globalState, TableConstraints.values());
         if (excludePrimaryKey) {
             tableConstraints.remove(TableConstraints.PRIMARY_KEY);
         }

@@ -18,7 +18,6 @@ public class PostgresAlterTableGenerator {
     private Randomly r;
     private static PostgresColumn randomColumn;
     private boolean generateOnlyKnown;
-    private List<String> opClasses;
     private PostgresGlobalState globalState;
 
     protected enum Action {
@@ -61,7 +60,6 @@ public class PostgresAlterTableGenerator {
         this.globalState = globalState;
         this.r = globalState.getRandomly();
         this.generateOnlyKnown = generateOnlyKnown;
-        this.opClasses = globalState.getOpClasses();
     }
 
     public static SQLQueryAdapter create(PostgresTable randomTable, PostgresGlobalState globalState,
@@ -97,7 +95,7 @@ public class PostgresAlterTableGenerator {
         errors.add("constraints on permanent tables may reference only permanent tables");
         List<Action> action;
         if (Randomly.getBoolean()) {
-            action = Randomly.nonEmptySubset(Action.values());
+            action = PostgresCommon.selectSubset(globalState, Action.values());
         } else {
             // make it more likely that the ALTER TABLE succeeds
             action = Randomly.subset(Randomly.smallNumber(), Action.values());
@@ -183,7 +181,7 @@ public class PostgresAlterTableGenerator {
                 }
                 sb.append(" TYPE ");
                 PostgresDataType randomType = PostgresDataType.getRandomType();
-                PostgresCommon.appendDataType(randomType, sb, false, generateOnlyKnown, opClasses);
+                PostgresCommon.appendDataType(randomType, sb, false, generateOnlyKnown, globalState);
                 // TODO [ COLLATE collation ] [ USING expression ]
                 errors.add("cannot alter type of a column used by a view or rule");
                 errors.add("cannot convert infinity to numeric");
@@ -245,7 +243,7 @@ public class PostgresAlterTableGenerator {
             case ALTER_COLUMN_SET_ATTRIBUTE_OPTION:
                 alterColumn(randomTable, sb);
                 sb.append(" SET(");
-                List<Attribute> subset = Randomly.nonEmptySubset(Attribute.values());
+                List<Attribute> subset = PostgresCommon.selectSubset(globalState, Attribute.values());
                 int j = 0;
                 for (Attribute attr : subset) {
                     if (j++ != 0) {
@@ -261,7 +259,7 @@ public class PostgresAlterTableGenerator {
             case ALTER_COLUMN_RESET_ATTRIBUTE_OPTION:
                 alterColumn(randomTable, sb);
                 sb.append(" RESET(");
-                subset = Randomly.nonEmptySubset(Attribute.values());
+                subset = PostgresCommon.selectSubset(globalState, Attribute.values());
                 j = 0;
                 for (Attribute attr : subset) {
                     if (j++ != 0) {
