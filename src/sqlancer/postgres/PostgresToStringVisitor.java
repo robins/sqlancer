@@ -179,8 +179,19 @@ public final class PostgresToStringVisitor extends ToStringVisitor<PostgresExpre
             visit(s.getOrderByClauses());
         }
         if (s.getLimitClause() != null) {
-            sb.append(" LIMIT ");
-            visit(s.getLimitClause());
+            if (s.isFetchFirst()) {
+                sb.append(" FETCH FIRST ");
+                visit(s.getLimitClause());
+                sb.append(" ROWS ");
+                if (s.isWithTies()) {
+                    sb.append("WITH TIES");
+                } else {
+                    sb.append("ONLY");
+                }
+            } else {
+                sb.append(" LIMIT ");
+                visit(s.getLimitClause());
+            }
         }
 
         if (s.getOffsetClause() != null) {
@@ -263,6 +274,9 @@ public final class PostgresToStringVisitor extends ToStringVisitor<PostgresExpre
             // sb.append(Randomly.getNotCachedInteger(1, 100));
             // sb.append(")");
             // }
+            break;
+        case UUID:
+            sb.append("UUID");
             break;
         default:
             throw new AssertionError(cast.getType());

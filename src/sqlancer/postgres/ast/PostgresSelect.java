@@ -24,6 +24,8 @@ public class PostgresSelect extends SelectBase<PostgresExpression>
     private ForClause forClause;
     private List<PostgresExpression> windowFunctions = new ArrayList<>();
     private final Map<String, WindowDefinition> windowDefinitions = new HashMap<>();
+    private boolean fetchFirst;
+    private boolean withTies;
 
     public enum ForClause {
         UPDATE("UPDATE"), NO_KEY_UPDATE("NO KEY UPDATE"), SHARE("SHARE"), KEY_SHARE("KEY SHARE");
@@ -194,5 +196,20 @@ public class PostgresSelect extends SelectBase<PostgresExpression>
     @Override
     public String asString() {
         return PostgresVisitor.asString(this);
+    }
+    public void setFetchFirst(boolean fetchFirst) {
+        this.fetchFirst = fetchFirst;
+    }
+
+    public boolean isFetchFirst() {
+        return fetchFirst;
+    }
+
+    public void setWithTies(boolean withTies) {
+        this.withTies = withTies;
+    }
+
+    public boolean isWithTies() {
+        return withTies;
     }
 }

@@ -247,11 +247,13 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
         if (entryURL.startsWith("jdbc:")) {
             entryURL = entryURL.substring(5);
         }
-        String entryDatabaseName = entryPath.substring(1);
+
         databaseName = globalState.getDatabaseName();
+        String entryDatabaseName = null;
+        URI uri = null;
 
         try {
-            URI uri = new URI(entryURL);
+            uri = new URI(entryURL);
             String userInfoURI = uri.getUserInfo();
             String pathURI = uri.getPath();
             if (userInfoURI != null) {
@@ -278,7 +280,8 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
             if (port == MainOptions.NO_SET_PORT) {
                 port = uri.getPort();
             }
-            entryURL = String.format("%s://%s:%d/%s", uri.getScheme(), host, port, entryDatabaseName);
+            entryDatabaseName = entryPath.substring(1);
+            entryURL = String.format("%s://%s:%d%s", uri.getScheme(), host, port, entryPath);
         } catch (URISyntaxException e) {
             throw new AssertionError(e);
         }
@@ -294,10 +297,10 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
             s.execute(createDatabaseCommand);
         }
         con.close();
-        int databaseIndex = entryURL.indexOf(entryDatabaseName);
-        String preDatabaseName = entryURL.substring(0, databaseIndex);
-        String postDatabaseName = entryURL.substring(databaseIndex + entryDatabaseName.length());
-        testURL = preDatabaseName + databaseName + postDatabaseName;
+            testURL = String.format("%s://%s:%d/%s", uri.getScheme(), host, port, databaseName);
+            if (uri.getRawQuery() != null) {
+                testURL += "?" + uri.getRawQuery();
+            }
         globalState.getState().logStatement(String.format("\\c %s;", databaseName));
 
         con = DriverManager.getConnection("jdbc:" + testURL, username, password);
