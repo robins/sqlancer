@@ -140,6 +140,27 @@ public enum PostgresFunctionWithUnknownResult {
     RANGE_UPPER_INF("upper_inf", PostgresDataType.BOOLEAN, PostgresDataType.RANGE), //
     RANGE_MERGE("range_merge", PostgresDataType.RANGE, PostgresDataType.RANGE, PostgresDataType.RANGE), //
 
+    // PostgreSQL 14 functions
+    // https://www.postgresql.org/docs/14/functions-datetime.html
+    DATE_BIN("date_bin", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT) {
+        @Override
+        public PostgresExpression[] getArguments(PostgresDataType returnType, PostgresExpressionGenerator gen,
+                int depth) {
+            PostgresExpression[] args = new PostgresExpression[3];
+            // interval argument
+            args[0] = PostgresConstant.createTextConstant(Randomly.fromOptions("1 hour", "1 day", "15 minutes", "1 week"));
+            // timestamp argument
+            args[1] = PostgresConstant.createTextConstant("2024-01-15 12:30:00");
+            // origin timestamp
+            args[2] = PostgresConstant.createTextConstant("2024-01-01 00:00:00");
+            return args;
+        }
+    },
+    // https://www.postgresql.org/docs/14/functions-string.html
+    UNISTR("unistr", PostgresDataType.TEXT, PostgresDataType.TEXT),
+    // https://www.postgresql.org/docs/14/functions-bitstring.html
+    BIT_XOR("bit_xor", PostgresDataType.INT, PostgresDataType.INT),
+
     // https://www.postgresql.org/docs/13/functions-admin.html#FUNCTIONS-ADMIN-DBSIZE
     GET_COLUMN_SIZE("get_column_size", PostgresDataType.INT, PostgresDataType.TEXT);
     // PG_DATABASE_SIZE("pg_database_size", PostgresDataType.INT, PostgresDataType.INT);

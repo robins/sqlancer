@@ -40,6 +40,10 @@ public final class PostgresRandomQueryGenerator {
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
             select.setGroupByExpressions(gen.generateExpressions(Randomly.smallNumber() + 1));
+            // PostgreSQL 14: GROUP BY DISTINCT
+            if (Randomly.getBoolean()) {
+                select.setGroupByDistinct(true);
+            }
             if (Randomly.getBoolean()) {
                 select.setHavingClause(gen.generateHavingClause());
             }

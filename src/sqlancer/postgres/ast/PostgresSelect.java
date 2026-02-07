@@ -26,6 +26,7 @@ public class PostgresSelect extends SelectBase<PostgresExpression>
     private final Map<String, WindowDefinition> windowDefinitions = new HashMap<>();
     private boolean fetchFirst;
     private boolean withTies;
+    private boolean groupByDistinct; // PostgreSQL 14 feature
 
     public enum ForClause {
         UPDATE("UPDATE"), NO_KEY_UPDATE("NO KEY UPDATE"), SHARE("SHARE"), KEY_SHARE("KEY SHARE");
@@ -211,5 +212,14 @@ public class PostgresSelect extends SelectBase<PostgresExpression>
 
     public boolean isWithTies() {
         return withTies;
+    }
+
+    // PostgreSQL 14 GROUP BY DISTINCT
+    public void setGroupByDistinct(boolean groupByDistinct) {
+        this.groupByDistinct = groupByDistinct;
+    }
+
+    public boolean isGroupByDistinct() {
+        return groupByDistinct;
     }
 }
