@@ -172,6 +172,65 @@ public enum PostgresFunctionWithUnknownResult {
     // https://www.postgresql.org/docs/16/functions-math.html
     RANDOM_NORMAL("random_normal", PostgresDataType.REAL, PostgresDataType.REAL, PostgresDataType.REAL),
 
+    // PostgreSQL 17 functions
+    // https://www.postgresql.org/docs/17/functions-json.html
+    // SQL/JSON query functions
+    JSON_EXISTS("json_exists", PostgresDataType.BOOLEAN, PostgresDataType.TEXT, PostgresDataType.TEXT) {
+        @Override
+        public PostgresExpression[] getArguments(PostgresDataType returnType, PostgresExpressionGenerator gen,
+                int depth) {
+            PostgresExpression[] args = new PostgresExpression[2];
+            // JSON value
+            args[0] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "{\"a\": 1}", "{\"b\": [1,2,3]}", "{\"x\": {\"y\": 2}}", "[]", "[1,2,3]"));
+            // JSON path expression
+            args[1] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "$.a", "$.b", "$.x.y", "$[0]", "$.c"));
+            return args;
+        }
+    },
+    JSON_VALUE("json_value", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT) {
+        @Override
+        public PostgresExpression[] getArguments(PostgresDataType returnType, PostgresExpressionGenerator gen,
+                int depth) {
+            PostgresExpression[] args = new PostgresExpression[2];
+            // JSON value
+            args[0] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "{\"a\": 1}", "{\"name\": \"test\"}", "{\"val\": 3.14}", "{\"flag\": true}"));
+            // JSON path expression
+            args[1] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "$.a", "$.name", "$.val", "$.flag"));
+            return args;
+        }
+    },
+    JSON_QUERY("json_query", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT) {
+        @Override
+        public PostgresExpression[] getArguments(PostgresDataType returnType, PostgresExpressionGenerator gen,
+                int depth) {
+            PostgresExpression[] args = new PostgresExpression[2];
+            // JSON value
+            args[0] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "{\"items\": [1,2,3]}", "{\"data\": {\"x\": 1}}", "[{\"a\":1},{\"a\":2}]"));
+            // JSON path expression
+            args[1] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "$.items", "$.data", "$[0]", "$.items[*]"));
+            return args;
+        }
+    },
+    // SQL/JSON constructor/serialization functions
+    JSON_SCALAR("json_scalar", PostgresDataType.TEXT, PostgresDataType.TEXT),
+    JSON_SERIALIZE("json_serialize", PostgresDataType.TEXT, PostgresDataType.TEXT) {
+        @Override
+        public PostgresExpression[] getArguments(PostgresDataType returnType, PostgresExpressionGenerator gen,
+                int depth) {
+            PostgresExpression[] args = new PostgresExpression[1];
+            // JSON value to serialize
+            args[0] = PostgresConstant.createTextConstant(Randomly.fromOptions(
+                "{\"a\": 1}", "[1, 2, 3]", "\"test\"", "123", "true", "null"));
+            return args;
+        }
+    },
+
     // https://www.postgresql.org/docs/13/functions-admin.html#FUNCTIONS-ADMIN-DBSIZE
     GET_COLUMN_SIZE("get_column_size", PostgresDataType.INT, PostgresDataType.TEXT);
     // PG_DATABASE_SIZE("pg_database_size", PostgresDataType.INT, PostgresDataType.INT);
