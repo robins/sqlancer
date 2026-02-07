@@ -150,6 +150,9 @@ public class MainOptions {
     @Parameter(names = "--canonicalize-sql-strings", description = "Should canonicalize query string (add ';' at the end", arity = 1)
     private boolean canonicalizeSqlString = true; // NOPMD
 
+    @Parameter(names = "--healthcheck", description = "Perform a healthcheck run", arity = 1)
+    private boolean healthCheck = false; // NOPMD
+
     public int getMaxExpressionDepth() {
         return maxExpressionDepth;
     }
@@ -341,6 +344,10 @@ public class MainOptions {
 
     public boolean canonicalizeSqlString() {
         return canonicalizeSqlString;
+    }
+
+    public boolean isHealthCheck() {
+        return healthCheck;
     }
 
 }

@@ -27,6 +27,7 @@ public class PostgresGlobalState extends SQLGlobalState<PostgresOptions, Postgre
     // store and allow filtering by function volatility classifications
     private final Map<String, Character> functionsAndTypes = new HashMap<>();
     private List<Character> allowedFunctionTypes = Arrays.asList(IMMUTABLE, STABLE, VOLATILE);
+    private PostgresHealthCheckStrategy healthCheckStrategy;
 
     @Override
     public void setConnection(SQLConnection con) {
@@ -148,6 +149,14 @@ public class PostgresGlobalState extends SQLGlobalState<PostgresOptions, Postgre
 
     public List<Character> getAllowedFunctionTypes() {
         return this.allowedFunctionTypes;
+    }
+
+    public void setHealthCheckStrategy(PostgresHealthCheckStrategy healthCheckStrategy) {
+        this.healthCheckStrategy = healthCheckStrategy;
+    }
+
+    public PostgresHealthCheckStrategy getHealthCheckStrategy() {
+        return healthCheckStrategy;
     }
 
 }

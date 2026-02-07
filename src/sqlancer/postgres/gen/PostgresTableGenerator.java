@@ -43,6 +43,7 @@ public class PostgresTableGenerator {
         errors.add("integer out of range");
         errors.add("division by zero");
         errors.add("cannot create partitioned table as inheritance child");
+        errors.add("partitioned tables cannot be unlogged");
         errors.add("cannot cast");
         errors.add("ERROR: functions in index expression must be marked IMMUTABLE");
         errors.add("functions in partition key expression must be marked IMMUTABLE");
@@ -145,7 +146,7 @@ public class PostgresTableGenerator {
         sb.append(name);
         sb.append(" ");
         PostgresDataType type = PostgresDataType.getRandomType();
-        boolean serial = PostgresCommon.appendDataType(type, sb, true, generateOnlyKnown, globalState.getCollates());
+        boolean serial = PostgresCommon.appendDataType(type, sb, true, generateOnlyKnown, globalState);
         PostgresColumn c = new PostgresColumn(name, type);
         c.setTable(table);
         columnsToBeAdded.add(c);
@@ -229,7 +230,7 @@ public class PostgresTableGenerator {
     };
 
     private void createColumnConstraint(PostgresDataType type, boolean serial) {
-        List<ColumnConstraint> constraintSubset = Randomly.nonEmptySubset(ColumnConstraint.values());
+        List<ColumnConstraint> constraintSubset = PostgresCommon.selectSubset(globalState, ColumnConstraint.values());
         if (Randomly.getBoolean()) {
             // make checks constraints less likely
             constraintSubset.remove(ColumnConstraint.CHECK);

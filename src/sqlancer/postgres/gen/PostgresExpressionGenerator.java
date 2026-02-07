@@ -102,6 +102,14 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         this.allowedFunctionTypes = globalState.getAllowedFunctionTypes();
     }
 
+    private <T> T selectOption(List<T> options) {
+        if (globalState.getOptions().isHealthCheck() && globalState.getHealthCheckStrategy() != null) {
+            return globalState.getHealthCheckStrategy().selectOption(options);
+        } else {
+            return Randomly.fromList(options);
+        }
+    }
+
     public PostgresExpressionGenerator setColumns(List<PostgresColumn> columns) {
         this.columns = columns;
         return this;
@@ -176,7 +184,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
             validOptions.remove(BooleanExpression.POSIX_REGEX);
             validOptions.remove(BooleanExpression.BINARY_RANGE_COMPARISON);
         }
-        BooleanExpression option = Randomly.fromList(validOptions);
+        BooleanExpression option = selectOption(validOptions);
         switch (option) {
         case POSTFIX_OPERATOR:
             PostfixOperator random = PostfixOperator.getRandom();
@@ -279,7 +287,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
     public PostgresExpression generateExpression(int depth, PostgresDataType originalType) {
         PostgresDataType dataType = originalType;
         if (dataType == PostgresDataType.REAL && Randomly.getBoolean()) {
-            dataType = Randomly.fromOptions(PostgresDataType.INT, PostgresDataType.FLOAT);
+            dataType = selectOption(Arrays.asList(PostgresDataType.INT, PostgresDataType.FLOAT));
         }
         if (dataType == PostgresDataType.FLOAT && Randomly.getBoolean()) {
             dataType = PostgresDataType.INT;
@@ -381,7 +389,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
     private PostgresExpression generateRangeExpression(int depth) {
         RangeExpression option;
         List<RangeExpression> validOptions = new ArrayList<>(Arrays.asList(RangeExpression.values()));
-        option = Randomly.fromList(validOptions);
+        option = selectOption(validOptions);
         switch (option) {
         case BINARY_OP:
             return new PostgresBinaryRangeOperation(PostgresBinaryRangeOperator.getRandom(),
@@ -405,7 +413,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         if (!globalState.getDbmsSpecificOptions().testCollations) {
             validOptions.remove(TextExpression.COLLATE);
         }
-        option = Randomly.fromList(validOptions);
+        option = selectOption(validOptions);
 
         switch (option) {
         case CAST:
@@ -495,7 +503,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     private PostgresExpression generateBitExpression(int depth) {
         BitExpression option;
-        option = Randomly.fromOptions(BitExpression.values());
+        option = selectOption(Arrays.asList(BitExpression.values()));
         switch (option) {
         case BINARY_OPERATION:
             return new PostgresBinaryBitOperation(PostgresBinaryBitOperator.getRandom(),
@@ -513,7 +521,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     private PostgresExpression generateIntExpression(int depth) {
         IntExpression option;
-        option = Randomly.fromOptions(IntExpression.values());
+        option = selectOption(Arrays.asList(IntExpression.values()));
         switch (option) {
         case CAST:
             return new PostgresCastOperation(generateExpression(depth + 1), getCompoundDataType(PostgresDataType.INT));
