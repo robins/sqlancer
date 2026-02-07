@@ -292,11 +292,16 @@ public class PostgresTableGenerator {
                     sb.append(" ALWAYS AS (");
                     sb.append(PostgresVisitor.asString(
                             PostgresExpressionGenerator.generateExpression(globalState, columnsToBeAdded, type)));
-                    sb.append(") STORED");
+                    sb.append(") ");
+                    // PostgreSQL 18: VIRTUAL is now the default, STORED is explicit
+                    // VIRTUAL columns are computed at query time, STORED are persisted
+                    sb.append(Randomly.fromOptions("STORED", "VIRTUAL"));
                     errors.add("A generated column cannot reference another generated column.");
                     errors.add("cannot use generated column in partition key");
                     errors.add("generation expression is not immutable");
                     errors.add("cannot use column reference in DEFAULT expression");
+                    // PostgreSQL 18 virtual column specific errors
+                    errors.add("virtual generated columns are not supported on partitioned tables");
                 } else {
                     sb.append(Randomly.fromOptions("ALWAYS", "BY DEFAULT"));
                     sb.append(" AS IDENTITY");

@@ -32,6 +32,10 @@ public final class PostgresDeleteGenerator {
         }
         if (Randomly.getBoolean()) {
             sb.append(" RETURNING ");
+            // PostgreSQL 18: OLD table alias for pre-modification values
+            if (Randomly.getBoolean()) {
+                sb.append("OLD.");
+            }
             sb.append(PostgresVisitor
                     .asString(PostgresExpressionGenerator.generateExpression(globalState, table.getColumns())));
         }

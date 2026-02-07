@@ -56,6 +56,16 @@ public final class PostgresUpdateGenerator extends AbstractUpdateGenerator<Postg
             sb.append(PostgresVisitor.asString(where));
         }
 
+        // PostgreSQL 18: RETURNING clause with OLD/NEW table aliases
+        if (Randomly.getBoolean()) {
+            sb.append(" RETURNING ");
+            // Choose between OLD (pre-update) or NEW (post-update) values
+            String tableAlias = Randomly.fromOptions("", "OLD.", "NEW.");
+            sb.append(tableAlias);
+            sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
+                    randomTable.getColumns())));
+        }
+
         return new SQLQueryAdapter(sb.toString(), errors, true);
     }
 
