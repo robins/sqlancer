@@ -168,6 +168,10 @@ public enum PostgresFunctionWithUnknownResult {
     REGEXP_INSTR("regexp_instr", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.TEXT),
     REGEXP_LIKE("regexp_like", PostgresDataType.BOOLEAN, PostgresDataType.TEXT, PostgresDataType.TEXT),
 
+    // PostgreSQL 16 functions
+    // https://www.postgresql.org/docs/16/functions-math.html
+    RANDOM_NORMAL("random_normal", PostgresDataType.REAL, PostgresDataType.REAL, PostgresDataType.REAL),
+
     // https://www.postgresql.org/docs/13/functions-admin.html#FUNCTIONS-ADMIN-DBSIZE
     GET_COLUMN_SIZE("get_column_size", PostgresDataType.INT, PostgresDataType.TEXT);
     // PG_DATABASE_SIZE("pg_database_size", PostgresDataType.INT, PostgresDataType.INT);
