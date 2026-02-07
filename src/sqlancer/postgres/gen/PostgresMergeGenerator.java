@@ -14,12 +14,13 @@ import sqlancer.postgres.PostgresVisitor;
 import sqlancer.postgres.ast.PostgresExpression;
 
 /**
- * Generates PostgreSQL MERGE statements (PostgreSQL 15 feature).
+ * Generates PostgreSQL MERGE statements (PostgreSQL 15+ feature).
  *
  * MERGE INTO target_table
  * USING source_table ON join_condition
  * WHEN MATCHED THEN UPDATE SET ...
  * WHEN NOT MATCHED THEN INSERT (...) VALUES (...)
+ * RETURNING ... (PostgreSQL 17+)
  */
 public final class PostgresMergeGenerator {
 
@@ -124,7 +125,18 @@ public final class PostgresMergeGenerator {
             sb.append(" WHEN MATCHED THEN DO NOTHING");
         }
 
-        // Common MERGE errors
+        // PostgreSQL 17: Optional RETURNING clause
+        if (Randomly.getBoolean()) {
+            sb.append(" RETURNING ");
+            List<PostgresColumn> returningColumns = targetTable.getRandomNonEmptyColumnSubset();
+            sb.append(returningColumns.stream().map(c -> "target." + c.getName()).collect(Collectors.joining(", ")));
+            // PostgreSQL 17: merge_action() function shows which action was performed
+            if (Randomly.getBoolean()) {
+                sb.append(", merge_action()");
+            }
+        }
+
+        // Common MERGE errors (v15+)
         errors.add("MERGE command cannot affect row a second time");
         errors.add("cannot affect row a second time");
         errors.add("violates foreign key constraint");
