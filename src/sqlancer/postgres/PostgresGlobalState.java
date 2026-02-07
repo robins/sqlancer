@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sqlancer.postgres.PostgresSchema.PostgresDataType;
+
 import sqlancer.Randomly;
 import sqlancer.SQLConnection;
 import sqlancer.SQLGlobalState;
@@ -24,6 +26,7 @@ public class PostgresGlobalState extends SQLGlobalState<PostgresOptions, Postgre
     private List<String> collates = Collections.emptyList();
     private List<String> opClasses = Collections.emptyList();
     private List<String> tableAccessMethods = Collections.emptyList();
+    private final Map<PostgresDataType, List<PostgresFunctionSignature>> functions = new HashMap<>();
     // store and allow filtering by function volatility classifications
     private final Map<String, Character> functionsAndTypes = new HashMap<>();
     private List<Character> allowedFunctionTypes = Arrays.asList(IMMUTABLE, STABLE, VOLATILE);
@@ -137,6 +140,23 @@ public class PostgresGlobalState extends SQLGlobalState<PostgresOptions, Postgre
 
     public Map<String, Character> getFunctionsAndTypes() {
         return this.functionsAndTypes;
+    }
+
+    public void addFunction(PostgresFunctionSignature f) {
+        if (!functions.containsKey(f.getReturnType())) {
+            functions.put(f.getReturnType(), new ArrayList<>());
+        }
+        functions.get(f.getReturnType()).add(f);
+        // Also add to the legacy map for now if needed, or just let it be independent
+        // This is mainly for filtering by volatility
+         this.functionsAndTypes.put(f.getName(), f.getVolatility());
+    }
+    
+    public List<PostgresFunctionSignature> getFunctionsCompatibleWith(PostgresDataType returnType) {
+        if (!functions.containsKey(returnType)) {
+            return Collections.emptyList();
+        }
+        return functions.get(returnType);
     }
 
     public void setAllowedFunctionTypes(List<Character> types) {

@@ -45,7 +45,6 @@ import sqlancer.postgres.ast.PostgresConstant;
 import sqlancer.postgres.ast.PostgresExpression;
 import sqlancer.postgres.ast.PostgresFunction;
 import sqlancer.postgres.ast.PostgresFunction.PostgresFunctionWithResult;
-import sqlancer.postgres.ast.PostgresFunctionWithUnknownResult;
 import sqlancer.postgres.ast.PostgresInOperation;
 import sqlancer.postgres.ast.PostgresJoin;
 import sqlancer.postgres.ast.PostgresJoin.PostgresJoinType;
@@ -140,17 +139,30 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
     }
 
     private PostgresExpression generateFunctionWithUnknownResult(int depth, PostgresDataType type) {
-        List<PostgresFunctionWithUnknownResult> supportedFunctions = PostgresFunctionWithUnknownResult
-                .getSupportedFunctions(type);
+        List<sqlancer.postgres.PostgresFunctionSignature> supportedFunctions = globalState.getFunctionsCompatibleWith(type);
         // filters functions by allowed type (STABLE 's', IMMUTABLE 'i', VOLATILE 'v')
         supportedFunctions = supportedFunctions.stream()
-                .filter(f -> allowedFunctionTypes.contains(functionsAndTypes.get(f.getName())))
+                .filter(f -> allowedFunctionTypes.contains(f.getVolatility()))
                 .collect(Collectors.toList());
+        
         if (supportedFunctions.isEmpty()) {
-            throw new IgnoreMeException();
+           throw new IgnoreMeException();
         }
-        PostgresFunctionWithUnknownResult randomFunction = Randomly.fromList(supportedFunctions);
-        return new PostgresFunction(randomFunction, type, randomFunction.getArguments(type, this, depth + 1));
+        
+        sqlancer.postgres.PostgresFunctionSignature randomFunction = Randomly.fromList(supportedFunctions);
+        
+        List<PostgresExpression> args = new ArrayList<>();
+        for (PostgresDataType argType : randomFunction.getArgumentTypes()) {
+            args.add(generateExpression(depth + 1, argType));
+        }
+        
+        if (randomFunction.isVariadic()) {
+            for (int i = 0; i < Randomly.smallNumber(); i++) {
+                 args.add(generateExpression(depth + 1, randomFunction.getArgumentTypes().get(randomFunction.getArgumentTypes().size() - 1)));
+            }
+        }
+
+        return new PostgresFunction(randomFunction, type, args.toArray(new PostgresExpression[0]));
     }
 
     private PostgresExpression generateFunctionWithKnownResult(int depth, PostgresDataType type) {

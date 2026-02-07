@@ -23,6 +23,13 @@ public class PostgresFunction implements PostgresExpression {
         this.args = args.clone();
     }
 
+    public PostgresFunction(sqlancer.postgres.PostgresFunctionSignature f, PostgresDataType returnType,
+            PostgresExpression... args) {
+        this.func = f.getName();
+        this.returnType = returnType;
+        this.args = args.clone();
+    }
+
     public String getFunctionName() {
         return func;
     }
