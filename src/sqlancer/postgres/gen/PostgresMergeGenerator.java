@@ -50,6 +50,13 @@ public final class PostgresMergeGenerator {
             sourceTable = targetTable; // fallback - use same table as source
         }
 
+        // Create aliased column lists for expression generation
+        List<PostgresColumn> targetColumnsAliased = aliasColumns(targetTable, "target");
+        List<PostgresColumn> sourceColumnsAliased = aliasColumns(sourceTable, "source");
+        List<PostgresColumn> combinedColumns = new java.util.ArrayList<>();
+        combinedColumns.addAll(targetColumnsAliased);
+        combinedColumns.addAll(sourceColumnsAliased);
+
         StringBuilder sb = new StringBuilder();
         sb.append("MERGE INTO ");
         sb.append(targetTable.getName());
@@ -59,9 +66,9 @@ public final class PostgresMergeGenerator {
         sb.append(" AS source");
         sb.append(" ON ");
 
-        // Generate join condition
+        // Generate join condition - can use both source and target
         PostgresExpression joinCondition = PostgresExpressionGenerator.generateExpression(globalState,
-                targetTable.getColumns(), PostgresDataType.BOOLEAN);
+                combinedColumns, PostgresDataType.BOOLEAN);
         sb.append(PostgresVisitor.asString(joinCondition));
 
         // WHEN MATCHED clause
@@ -69,8 +76,9 @@ public final class PostgresMergeGenerator {
             sb.append(" WHEN MATCHED");
             if (Randomly.getBoolean()) {
                 sb.append(" AND ");
+                // MATCHED can use both source and target
                 PostgresExpression matchedCondition = PostgresExpressionGenerator.generateExpression(globalState,
-                        targetTable.getColumns(), PostgresDataType.BOOLEAN);
+                        combinedColumns, PostgresDataType.BOOLEAN);
                 sb.append(PostgresVisitor.asString(matchedCondition));
             }
             sb.append(" THEN ");
@@ -84,8 +92,9 @@ public final class PostgresMergeGenerator {
                     }
                     sb.append(columns.get(i).getName());
                     sb.append(" = ");
-                    PostgresExpression value = PostgresExpressionGenerator.generateConstant(
-                            globalState.getRandomly(), columns.get(i).getType());
+                    // UPDATE SET values can use both source and target
+                    PostgresExpression value = PostgresExpressionGenerator.generateExpression(globalState,
+                            combinedColumns, columns.get(i).getType());
                     sb.append(PostgresVisitor.asString(value));
                 }
             } else {
@@ -99,8 +108,9 @@ public final class PostgresMergeGenerator {
             sb.append(" WHEN NOT MATCHED");
             if (Randomly.getBoolean()) {
                 sb.append(" AND ");
+                // NOT MATCHED can only use source columns
                 PostgresExpression notMatchedCondition = PostgresExpressionGenerator.generateExpression(globalState,
-                        sourceTable.getColumns(), PostgresDataType.BOOLEAN);
+                        sourceColumnsAliased, PostgresDataType.BOOLEAN);
                 sb.append(PostgresVisitor.asString(notMatchedCondition));
             }
             sb.append(" THEN INSERT ");
@@ -112,8 +122,9 @@ public final class PostgresMergeGenerator {
                 if (i != 0) {
                     sb.append(", ");
                 }
-                PostgresExpression value = PostgresExpressionGenerator.generateConstant(
-                        globalState.getRandomly(), insertColumns.get(i).getType());
+                // INSERT values can only use source columns
+                PostgresExpression value = PostgresExpressionGenerator.generateExpression(globalState,
+                        sourceColumnsAliased, insertColumns.get(i).getType());
                 sb.append(PostgresVisitor.asString(value));
             }
             sb.append(")");
@@ -129,9 +140,9 @@ public final class PostgresMergeGenerator {
         // PostgreSQL 18: OLD/NEW table aliases for pre/post-modification values
         if (Randomly.getBoolean()) {
             sb.append(" RETURNING ");
-            List<PostgresColumn> returningColumns = targetTable.getRandomNonEmptyColumnSubset();
             // Choose between OLD, NEW, or target alias for returned columns
             String tableAlias = Randomly.fromOptions("target.", "OLD.", "NEW.");
+            List<PostgresColumn> returningColumns = targetTable.getRandomNonEmptyColumnSubset();
             sb.append(returningColumns.stream().map(c -> tableAlias + c.getName()).collect(Collectors.joining(", ")));
             // PostgreSQL 17: merge_action() function shows which action was performed
             if (Randomly.getBoolean()) {
@@ -154,5 +165,15 @@ public final class PostgresMergeGenerator {
         errors.add("could not determine which collation to use");
 
         return new SQLQueryAdapter(sb.toString(), errors, true);
+    }
+
+    private static List<PostgresColumn> aliasColumns(PostgresTable table, String alias) {
+        PostgresTable aliasedTable = new PostgresTable(alias, table.getColumns(), table.getIndexes(),
+                table.getTableType(), table.getStatistics(), table.isView(), table.isInsertable());
+        return table.getColumns().stream().map(c -> {
+            PostgresColumn aliasedColumn = new PostgresColumn(c.getName(), c.getType());
+            aliasedColumn.setTable(aliasedTable);
+            return aliasedColumn;
+        }).collect(Collectors.toList());
     }
 }
