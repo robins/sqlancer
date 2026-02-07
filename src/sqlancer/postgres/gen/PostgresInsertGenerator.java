@@ -101,6 +101,18 @@ public final class PostgresInsertGenerator {
         errors.add("division by zero");
         errors.add("violates foreign key constraint");
         errors.add("data type unknown");
+
+        // PostgreSQL 18: RETURNING clause with optional NEW table alias
+        if (Randomly.getBoolean()) {
+            sb.append(" RETURNING ");
+            // For INSERT, only NEW is valid (shows inserted values)
+            if (Randomly.getBoolean()) {
+                sb.append("NEW.");
+            }
+            sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
+                    columns)));
+        }
+
         return new SQLQueryAdapter(sb.toString(), errors);
     }
 

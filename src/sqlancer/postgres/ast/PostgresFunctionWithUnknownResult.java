@@ -231,6 +231,11 @@ public enum PostgresFunctionWithUnknownResult {
         }
     },
 
+    // PostgreSQL 18 functions
+    // https://www.postgresql.org/docs/18/functions-uuid.html
+    // UUIDv7 generates timestamp-ordered UUIDs
+    UUIDV7("uuidv7", PostgresDataType.UUID),
+
     // https://www.postgresql.org/docs/13/functions-admin.html#FUNCTIONS-ADMIN-DBSIZE
     GET_COLUMN_SIZE("get_column_size", PostgresDataType.INT, PostgresDataType.TEXT);
     // PG_DATABASE_SIZE("pg_database_size", PostgresDataType.INT, PostgresDataType.INT);

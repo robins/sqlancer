@@ -126,10 +126,13 @@ public final class PostgresMergeGenerator {
         }
 
         // PostgreSQL 17: Optional RETURNING clause
+        // PostgreSQL 18: OLD/NEW table aliases for pre/post-modification values
         if (Randomly.getBoolean()) {
             sb.append(" RETURNING ");
             List<PostgresColumn> returningColumns = targetTable.getRandomNonEmptyColumnSubset();
-            sb.append(returningColumns.stream().map(c -> "target." + c.getName()).collect(Collectors.joining(", ")));
+            // Choose between OLD, NEW, or target alias for returned columns
+            String tableAlias = Randomly.fromOptions("target.", "OLD.", "NEW.");
+            sb.append(returningColumns.stream().map(c -> tableAlias + c.getName()).collect(Collectors.joining(", ")));
             // PostgreSQL 17: merge_action() function shows which action was performed
             if (Randomly.getBoolean()) {
                 sb.append(", merge_action()");
