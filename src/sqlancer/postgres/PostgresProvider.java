@@ -305,12 +305,59 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
     }
 
     protected void readFunctions(PostgresGlobalState globalState) throws SQLException {
-        SQLQueryAdapter query = new SQLQueryAdapter("SELECT proname, provolatile FROM pg_proc;");
-        SQLancerResultSet rs = query.executeAndGet(globalState);
-        while (rs.next()) {
-            String functionName = rs.getString(1);
-            Character functionType = rs.getString(2).charAt(0);
-            globalState.addFunctionAndType(functionName, functionType);
+        // Query to get function signatures
+        // format_type(p.prorettype, null) gets the return type name
+        // oidvectortypes(p.proargtypes) gets the argument types as a comma-separated string
+        String sql = "SELECT p.proname, p.provolatile, format_type(p.prorettype, null) as return_type, "
+                   + "oidvectortypes(p.proargtypes) as arg_types, p.provariadic > 0 as is_variadic "
+                   + "FROM pg_proc p "
+                   + "WHERE p.prokind = 'f' "
+                   + "AND has_function_privilege(p.oid, 'EXECUTE');";
+        
+        try (SQLancerResultSet rs = new SQLQueryAdapter(sql).executeAndGet(globalState)) {
+             
+            while (rs.next()) {
+                String functionName = rs.getString("proname");
+                char volatility = rs.getString("provolatile").charAt(0);
+                String returnTypeStr = rs.getString("return_type");
+                String argTypesStr = rs.getString("arg_types");
+                String isVariadicStr = rs.getString("is_variadic");
+                boolean isVariadic = isVariadicStr != null && isVariadicStr.equalsIgnoreCase("t");
+                
+                if (returnTypeStr == null) {
+                    continue; // Skip if return type is unknown
+                }
+
+                PostgresSchema.PostgresDataType returnType;
+                try {
+                    returnType = PostgresSchema.getColumnType(returnTypeStr);
+                } catch (AssertionError e) {
+                    // Type not supported by SQLancer
+                    continue;
+                }
+                
+                List<PostgresSchema.PostgresDataType> argTypes = new ArrayList<>();
+                boolean argsSupported = true;
+                if (argTypesStr != null && !argTypesStr.isEmpty()) {
+                    for (String argTypeStr : argTypesStr.split(", ")) {
+                        try {
+                            argTypes.add(PostgresSchema.getColumnType(argTypeStr.trim()));
+                        } catch (AssertionError e) {
+                            argsSupported = false;
+                            break;
+                        }
+                    }
+                }
+                
+                if (argsSupported) {
+                    PostgresFunctionSignature signature = new PostgresFunctionSignature(
+                        functionName, returnType, argTypes, isVariadic, volatility);
+                    globalState.addFunction(signature);
+                }
+            }
+        } catch (Exception e) {
+            // Fallback or just log if dynamic loading fails significantly, but here we just print
+            e.printStackTrace();
         }
     }
 
