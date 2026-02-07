@@ -161,6 +161,13 @@ public enum PostgresFunctionWithUnknownResult {
     // https://www.postgresql.org/docs/14/functions-bitstring.html
     BIT_XOR("bit_xor", PostgresDataType.INT, PostgresDataType.INT),
 
+    // PostgreSQL 15 functions
+    // https://www.postgresql.org/docs/15/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+    REGEXP_SUBSTR("regexp_substr", PostgresDataType.TEXT, PostgresDataType.TEXT, PostgresDataType.TEXT),
+    REGEXP_COUNT("regexp_count", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.TEXT),
+    REGEXP_INSTR("regexp_instr", PostgresDataType.INT, PostgresDataType.TEXT, PostgresDataType.TEXT),
+    REGEXP_LIKE("regexp_like", PostgresDataType.BOOLEAN, PostgresDataType.TEXT, PostgresDataType.TEXT),
+
     // https://www.postgresql.org/docs/13/functions-admin.html#FUNCTIONS-ADMIN-DBSIZE
     GET_COLUMN_SIZE("get_column_size", PostgresDataType.INT, PostgresDataType.TEXT);
     // PG_DATABASE_SIZE("pg_database_size", PostgresDataType.INT, PostgresDataType.INT);
