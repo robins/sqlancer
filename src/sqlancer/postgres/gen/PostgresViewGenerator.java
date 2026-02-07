@@ -54,15 +54,20 @@ public final class PostgresViewGenerator {
             sb.append(DBMSCommon.createColumnName(i));
         }
         sb.append(")");
-        // if (Randomly.getBoolean() && false) {
-        // sb.append(" WITH(");
-        // if (Randomly.getBoolean()) {
-        // sb.append(String.format("security_barrier(%s)", Randomly.getBoolean()));
-        // } else {
-        // sb.append(String.format("check_option(%s)", Randomly.fromOptions("local1", "cascaded")));
-        // }
-        // sb.append(")");
-        // }
+        // PostgreSQL 15: security_invoker option for non-materialized views
+        if (!materialized && Randomly.getBoolean()) {
+            sb.append(" WITH (");
+            if (Randomly.getBoolean()) {
+                sb.append(String.format("security_barrier = %s", Randomly.getBoolean()));
+                if (Randomly.getBoolean()) {
+                    sb.append(String.format(", security_invoker = %s", Randomly.getBoolean()));
+                }
+            } else {
+                // PostgreSQL 15 feature
+                sb.append(String.format("security_invoker = %s", Randomly.getBoolean()));
+            }
+            sb.append(")");
+        }
         sb.append(" AS (");
         PostgresSelect select = PostgresRandomQueryGenerator.createRandomQuery(nrColumns, globalState);
         sb.append(PostgresVisitor.asString(select));
