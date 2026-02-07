@@ -34,10 +34,16 @@ public final class PostgresDeleteGenerator {
             sb.append(" RETURNING ");
             // PostgreSQL 18: OLD table alias for pre-modification values
             if (Randomly.getBoolean()) {
-                sb.append("OLD.");
+                if (Randomly.getBoolean()) {
+                    sb.append("OLD.*");
+                } else {
+                    sb.append("OLD.");
+                    sb.append(table.getRandomColumn().getName());
+                }
+            } else {
+                sb.append(PostgresVisitor
+                        .asString(PostgresExpressionGenerator.generateExpression(globalState, table.getColumns())));
             }
-            sb.append(PostgresVisitor
-                    .asString(PostgresExpressionGenerator.generateExpression(globalState, table.getColumns())));
         }
         PostgresCommon.addCommonExpressionErrors(errors);
         errors.add("out of range");

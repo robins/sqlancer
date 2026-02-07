@@ -68,12 +68,15 @@ public class PostgresTableGenerator {
 
     protected SQLQueryAdapter generate() {
         columnCanHavePrimaryKey = true;
+        // Decide partition status early to avoid generating invalid UNLOGGED partitioned tables
+        isPartitionedTable = Randomly.getBoolean();
         sb.append("CREATE");
         if (Randomly.getBoolean()) {
             sb.append(" ");
             isTemporaryTable = true;
             sb.append(Randomly.fromOptions("TEMPORARY", "TEMP"));
-        } else if (Randomly.getBoolean()) {
+        } else if (!isPartitionedTable && Randomly.getBoolean()) {
+            // UNLOGGED is not allowed for partitioned tables
             sb.append(" UNLOGGED");
         }
         sb.append(" TABLE");
@@ -157,11 +160,10 @@ public class PostgresTableGenerator {
     }
 
     private void generatePartitionBy() {
-        if (Randomly.getBoolean()) {
-            isPartitionedTable = false;
+        // isPartitionedTable is already decided in generate() to avoid UNLOGGED conflicts
+        if (!isPartitionedTable) {
             return;
         }
-        isPartitionedTable = true;
         sb.append(" PARTITION BY ");
         // TODO "RANGE",
         String partitionOption = Randomly.fromOptions("RANGE", "LIST", "HASH");

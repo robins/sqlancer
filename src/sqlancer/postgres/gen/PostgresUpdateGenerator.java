@@ -60,10 +60,20 @@ public final class PostgresUpdateGenerator extends AbstractUpdateGenerator<Postg
         if (Randomly.getBoolean()) {
             sb.append(" RETURNING ");
             // Choose between OLD (pre-update) or NEW (post-update) values
-            String tableAlias = Randomly.fromOptions("", "OLD.", "NEW.");
-            sb.append(tableAlias);
-            sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
-                    randomTable.getColumns())));
+            if (Randomly.getBoolean()) {
+                String tableAlias = Randomly.fromOptions("OLD", "NEW");
+                if (Randomly.getBoolean()) {
+                    sb.append(tableAlias);
+                    sb.append(".*");
+                } else {
+                    sb.append(tableAlias);
+                    sb.append(".");
+                    sb.append(randomTable.getRandomColumn().getName());
+                }
+            } else {
+                sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
+                        randomTable.getColumns())));
+            }
         }
 
         return new SQLQueryAdapter(sb.toString(), errors, true);

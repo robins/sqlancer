@@ -330,7 +330,7 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
         }
         con.close();
         try {
-            URI uri = new URI(entryURL);
+            uri = new URI(entryURL);
             testURL = String.format("%s://%s:%d/%s", uri.getScheme(), host, port, databaseName);
             if (uri.getQuery() != null) {
                 testURL += "?" + uri.getQuery();

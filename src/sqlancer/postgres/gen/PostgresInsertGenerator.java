@@ -107,10 +107,16 @@ public final class PostgresInsertGenerator {
             sb.append(" RETURNING ");
             // For INSERT, only NEW is valid (shows inserted values)
             if (Randomly.getBoolean()) {
-                sb.append("NEW.");
+                if (Randomly.getBoolean()) {
+                    sb.append("NEW.*");
+                } else {
+                    sb.append("NEW.");
+                    sb.append(table.getRandomColumn().getName());
+                }
+            } else {
+                sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
+                        columns)));
             }
-            sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
-                    columns)));
         }
 
         return new SQLQueryAdapter(sb.toString(), errors);
