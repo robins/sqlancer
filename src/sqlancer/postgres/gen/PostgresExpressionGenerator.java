@@ -551,8 +551,18 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         case FUNCTION:
             return generateFunction(depth + 1, PostgresDataType.INT);
         case BINARY_ARITHMETIC_EXPRESSION:
-            return new PostgresBinaryArithmeticOperation(generateExpression(depth + 1, PostgresDataType.INT),
-                    generateExpression(depth + 1, PostgresDataType.INT), PostgresBinaryOperator.getRandom());
+            PostgresBinaryOperator op = PostgresBinaryOperator.getRandom();
+            PostgresExpression leftOperand = generateExpression(depth + 1, PostgresDataType.INT);
+            PostgresExpression rightOperand;
+            // Avoid division by zero for DIVISION and MODULO operations
+            if (op == PostgresBinaryOperator.DIVISION || op == PostgresBinaryOperator.MODULO) {
+                // Generate a non-zero integer (1 to 1000) to avoid division by zero
+                long nonZeroValue = Randomly.getNotCachedInteger(1, 1001);
+                rightOperand = PostgresConstant.createIntConstant(nonZeroValue);
+            } else {
+                rightOperand = generateExpression(depth + 1, PostgresDataType.INT);
+            }
+            return new PostgresBinaryArithmeticOperation(leftOperand, rightOperand, op);
         default:
             throw new AssertionError();
         }

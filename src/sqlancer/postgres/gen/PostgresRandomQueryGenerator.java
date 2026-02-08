@@ -10,6 +10,7 @@ import sqlancer.postgres.PostgresGlobalState;
 import sqlancer.postgres.PostgresSchema.PostgresTables;
 import sqlancer.postgres.ast.PostgresConstant;
 import sqlancer.postgres.ast.PostgresExpression;
+import sqlancer.postgres.ast.PostgresOrderByTerm;
 import sqlancer.postgres.ast.PostgresSelect;
 import sqlancer.postgres.ast.PostgresSelect.ForClause;
 import sqlancer.postgres.ast.PostgresSelect.PostgresFromTable;
@@ -29,8 +30,10 @@ public final class PostgresRandomQueryGenerator {
         }
         PostgresSelect select = new PostgresSelect();
         select.setSelectType(SelectType.getRandom());
+        PostgresExpression distinctOnExpr = null;
         if (select.getSelectOption() == SelectType.DISTINCT && Randomly.getBoolean()) {
-            select.setDistinctOnClause(gen.generateExpression(0));
+            distinctOnExpr = gen.generateExpression(0);
+            select.setDistinctOnClause(distinctOnExpr);
         }
         select.setFromList(tables.getTables().stream().map(t -> new PostgresFromTable(t, Randomly.getBoolean()))
                 .collect(Collectors.toList()));
@@ -48,8 +51,14 @@ public final class PostgresRandomQueryGenerator {
                 select.setHavingClause(gen.generateHavingCondition());
             }
         }
-        if (Randomly.getBooleanWithRatherLowProbability()) {
-            select.setOrderByClauses(gen.generateOrderBys());
+        if (Randomly.getBooleanWithRatherLowProbability() || distinctOnExpr != null) {
+            List<PostgresExpression> orderBys = new ArrayList<>();
+            // PostgreSQL requires DISTINCT ON expressions to appear first in ORDER BY
+            if (distinctOnExpr != null) {
+                orderBys.add(new PostgresOrderByTerm(distinctOnExpr, Randomly.getBoolean()));
+            }
+            orderBys.addAll(gen.generateOrderBys());
+            select.setOrderByClauses(orderBys);
         }
         if (Randomly.getBoolean()) {
             select.setLimitClause(PostgresConstant.createIntConstant(Randomly.getPositiveOrZeroNonCachedInteger()));
@@ -79,8 +88,10 @@ public final class PostgresRandomQueryGenerator {
         }
         PostgresSelect select = new PostgresSelect();
         select.setSelectType(SelectType.getRandom());
+        PostgresExpression distinctOnExpr = null;
         if (select.getSelectOption() == SelectType.DISTINCT && Randomly.getBoolean()) {
-            select.setDistinctOnClause(gen.generateExpression(0));
+            distinctOnExpr = gen.generateExpression(0);
+            select.setDistinctOnClause(distinctOnExpr);
         }
         select.setFromList(tables.getTables().stream().map(t -> new PostgresFromTable(t, Randomly.getBoolean()))
                 .collect(Collectors.toList()));
@@ -97,8 +108,14 @@ public final class PostgresRandomQueryGenerator {
                 select.setHavingClause(gen.generateHavingCondition());
             }
         }
-        if (Randomly.getBooleanWithRatherLowProbability()) {
-            select.setOrderByClauses(gen.generateOrderBys());
+        if (Randomly.getBooleanWithRatherLowProbability() || distinctOnExpr != null) {
+            List<PostgresExpression> orderBys = new ArrayList<>();
+            // PostgreSQL requires DISTINCT ON expressions to appear first in ORDER BY
+            if (distinctOnExpr != null) {
+                orderBys.add(new PostgresOrderByTerm(distinctOnExpr, Randomly.getBoolean()));
+            }
+            orderBys.addAll(gen.generateOrderBys());
+            select.setOrderByClauses(orderBys);
         }
         if (Randomly.getBoolean()) {
             select.setLimitClause(PostgresConstant.createIntConstant(Randomly.getPositiveOrZeroNonCachedInteger()));
