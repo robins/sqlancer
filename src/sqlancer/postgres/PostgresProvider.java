@@ -349,7 +349,7 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
         // format_type(p.prorettype, null) gets the return type name
         // oidvectortypes(p.proargtypes) gets the argument types as a comma-separated string
         String sql = "SELECT p.proname, p.provolatile, format_type(p.prorettype, null) as return_type, "
-                   + "oidvectortypes(p.proargtypes) as arg_types, p.provariadic > 0 as is_variadic "
+                   + "oidvectortypes(p.proargtypes) as arg_types, p.provariadic > 0 as is_variadic, p.proretset "
                    + "FROM pg_proc p "
                    + "WHERE p.prokind = 'f' "
                    + "AND has_function_privilege(p.oid, 'EXECUTE');";
@@ -363,6 +363,8 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
                 String argTypesStr = rs.getString("arg_types");
                 String isVariadicStr = rs.getString("is_variadic");
                 boolean isVariadic = isVariadicStr != null && isVariadicStr.equalsIgnoreCase("t");
+                String returnsSetStr = rs.getString("proretset");
+                boolean returnsSet = returnsSetStr != null && returnsSetStr.equalsIgnoreCase("t");
                 
                 if (returnTypeStr == null) {
                     continue; // Skip if return type is unknown
@@ -391,7 +393,7 @@ public class PostgresProvider extends SQLProviderAdapter<PostgresGlobalState, Po
                 
                 if (argsSupported) {
                     PostgresFunctionSignature signature = new PostgresFunctionSignature(
-                        functionName, returnType, argTypes, isVariadic, volatility);
+                        functionName, returnType, argTypes, isVariadic, returnsSet, volatility);
                     globalState.addFunction(signature);
                 }
             }

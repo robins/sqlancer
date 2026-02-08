@@ -10,14 +10,16 @@ public class PostgresFunctionSignature {
     private final PostgresDataType returnType;
     private final List<PostgresDataType> argumentTypes;
     private final boolean isVariadic;
+    private final boolean returnsSet;
     private final char volatility;
 
     public PostgresFunctionSignature(String name, PostgresDataType returnType, List<PostgresDataType> argumentTypes,
-            boolean isVariadic, char volatility) {
+            boolean isVariadic, boolean returnsSet, char volatility) {
         this.name = name;
         this.returnType = returnType;
         this.argumentTypes = argumentTypes;
         this.isVariadic = isVariadic;
+        this.returnsSet = returnsSet;
         this.volatility = volatility;
     }
 
@@ -39,6 +41,10 @@ public class PostgresFunctionSignature {
 
     public char getVolatility() {
         return volatility;
+    }
+    
+    public boolean returnsSet() {
+        return returnsSet;
     }
     
     @Override

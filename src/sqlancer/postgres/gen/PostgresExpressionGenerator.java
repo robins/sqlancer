@@ -89,6 +89,8 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     private boolean allowAggregateFunctions;
 
+    private boolean allowSetReturningFunctions = true;
+
     private final Map<String, Character> functionsAndTypes;
 
     private final List<Character> allowedFunctionTypes;
@@ -144,6 +146,9 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         supportedFunctions = supportedFunctions.stream()
                 .filter(f -> allowedFunctionTypes.contains(f.getVolatility()))
                 .collect(Collectors.toList());
+        if (!allowSetReturningFunctions) {
+            supportedFunctions = supportedFunctions.stream().filter(f -> !f.returnsSet()).collect(Collectors.toList());
+        }
         
         if (supportedFunctions.isEmpty()) {
            throw new IgnoreMeException();
@@ -691,6 +696,11 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     public PostgresExpressionGenerator allowAggregates(boolean value) {
         allowAggregateFunctions = value;
+        return this;
+    }
+
+    public PostgresExpressionGenerator allowSetReturningFunctions(boolean value) {
+        allowSetReturningFunctions = value;
         return this;
     }
 

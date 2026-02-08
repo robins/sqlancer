@@ -280,8 +280,9 @@ public class PostgresTableGenerator {
                 break;
             case CHECK:
                 sb.append("CHECK (");
-                sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
-                        columnsToBeAdded, PostgresDataType.BOOLEAN)));
+                PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(columnsToBeAdded);
+                gen.allowSetReturningFunctions(false);
+                sb.append(PostgresVisitor.asString(gen.generateExpression(0, PostgresDataType.BOOLEAN)));
                 sb.append(")");
                 if (Randomly.getBoolean()) {
                     sb.append(" NO INHERIT");

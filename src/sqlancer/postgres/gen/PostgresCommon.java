@@ -412,7 +412,9 @@ public final class PostgresCommon {
         switch (t) {
         case CHECK:
             sb.append("CHECK(");
-            sb.append(PostgresVisitor.getExpressionAsString(globalState, PostgresDataType.BOOLEAN, table.getColumns()));
+            PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(table.getColumns());
+            gen.allowSetReturningFunctions(false);
+            sb.append(PostgresVisitor.asString(gen.generateExpression(0, PostgresDataType.BOOLEAN)));
             sb.append(")");
             errors.add("constraint must be added to child tables too");
             errors.add("missing FROM-clause entry for table");
