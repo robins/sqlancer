@@ -74,7 +74,7 @@ public class PostgresJoin implements PostgresExpression, Join<PostgresExpression
             columns.addAll(right.getTable().getColumns());
             PostgresExpressionGenerator joinGen = new PostgresExpressionGenerator(globalState).setColumns(columns);
             joinExpressions.add(PostgresJoin.createJoin(left, right, PostgresJoinType.getRandom(),
-                    joinGen.generateExpression(0, PostgresDataType.BOOLEAN)));
+                    joinGen.generateJoinCondition()));
         }
         return joinExpressions;
     }

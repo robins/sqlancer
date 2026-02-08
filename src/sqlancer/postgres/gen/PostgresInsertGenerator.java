@@ -114,8 +114,8 @@ public final class PostgresInsertGenerator {
                     sb.append(table.getRandomColumn().getName());
                 }
             } else {
-                sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
-                        columns)));
+                sb.append(PostgresVisitor.asString(new PostgresExpressionGenerator(globalState).setColumns(columns)
+                        .allowSetReturningFunctions(false).generateExpression(0)));
             }
         }
 

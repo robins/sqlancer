@@ -126,6 +126,9 @@ public final class PostgresCommon {
         errors.add("set-returning functions are not allowed in DEFAULT expressions");
         errors.add("set-returning functions are not allowed in index expressions");
         errors.add("set-returning functions are not allowed in index predicates");
+        errors.add("recovery is not in progress");
+        errors.add("count must be greater than zero");
+        errors.add("invalid name syntax");
 
         return errors;
     }

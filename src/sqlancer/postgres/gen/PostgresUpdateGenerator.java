@@ -8,7 +8,6 @@ import sqlancer.common.gen.AbstractUpdateGenerator;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.postgres.PostgresGlobalState;
 import sqlancer.postgres.PostgresSchema.PostgresColumn;
-import sqlancer.postgres.PostgresSchema.PostgresDataType;
 import sqlancer.postgres.PostgresSchema.PostgresTable;
 import sqlancer.postgres.PostgresVisitor;
 import sqlancer.postgres.ast.PostgresExpression;
@@ -51,8 +50,8 @@ public final class PostgresUpdateGenerator extends AbstractUpdateGenerator<Postg
         PostgresCommon.addCommonExpressionErrors(errors);
         if (!Randomly.getBooleanWithSmallProbability()) {
             sb.append(" WHERE ");
-            PostgresExpression where = PostgresExpressionGenerator.generateExpression(globalState,
-                    randomTable.getColumns(), PostgresDataType.BOOLEAN);
+            PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(randomTable.getColumns());
+            PostgresExpression where = gen.generateWhereCondition();
             sb.append(PostgresVisitor.asString(where));
         }
 
@@ -71,8 +70,9 @@ public final class PostgresUpdateGenerator extends AbstractUpdateGenerator<Postg
                     sb.append(randomTable.getRandomColumn().getName());
                 }
             } else {
-                sb.append(PostgresVisitor.asString(PostgresExpressionGenerator.generateExpression(globalState,
-                        randomTable.getColumns())));
+                PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(randomTable.getColumns());
+                gen.allowSetReturningFunctions(false);
+                sb.append(PostgresVisitor.asString(gen.generateExpression(0)));
             }
         }
 
@@ -89,8 +89,8 @@ public final class PostgresUpdateGenerator extends AbstractUpdateGenerator<Postg
             sb.append("DEFAULT");
         } else {
             sb.append("(");
-            PostgresExpression expr = PostgresExpressionGenerator.generateExpression(globalState,
-                    randomTable.getColumns(), column.getType());
+            PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(randomTable.getColumns());
+            PostgresExpression expr = gen.generateExpression(0, column.getType());
             // caused by casts
             sb.append(PostgresVisitor.asString(expr));
             sb.append(")");

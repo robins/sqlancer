@@ -686,12 +686,19 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
     }
 
     public PostgresAggregate generateArgsForAggregate(PostgresDataType dataType, PostgresAggregateFunction agg) {
-        List<PostgresDataType> types = agg.getTypes(dataType);
-        List<PostgresExpression> args = new ArrayList<>();
-        for (PostgresDataType argType : types) {
-            args.add(generateExpression(argType));
+        // PostgreSQL does not allow set-returning functions inside aggregate function calls
+        boolean previousSrfSetting = allowSetReturningFunctions;
+        allowSetReturningFunctions = false;
+        try {
+            List<PostgresDataType> types = agg.getTypes(dataType);
+            List<PostgresExpression> args = new ArrayList<>();
+            for (PostgresDataType argType : types) {
+                args.add(generateExpression(argType));
+            }
+            return new PostgresAggregate(args, agg);
+        } finally {
+            allowSetReturningFunctions = previousSrfSetting;
         }
-        return new PostgresAggregate(args, agg);
     }
 
     public PostgresExpressionGenerator allowAggregates(boolean value) {

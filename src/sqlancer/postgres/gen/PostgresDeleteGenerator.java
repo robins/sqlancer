@@ -41,8 +41,8 @@ public final class PostgresDeleteGenerator {
                     sb.append(table.getRandomColumn().getName());
                 }
             } else {
-                sb.append(PostgresVisitor
-                        .asString(PostgresExpressionGenerator.generateExpression(globalState, table.getColumns())));
+                sb.append(PostgresVisitor.asString(new PostgresExpressionGenerator(globalState)
+                        .setColumns(table.getColumns()).allowSetReturningFunctions(false).generateExpression(0)));
             }
         }
         PostgresCommon.addCommonExpressionErrors(errors);
