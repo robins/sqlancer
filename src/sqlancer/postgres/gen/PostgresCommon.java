@@ -118,6 +118,14 @@ public final class PostgresCommon {
         errors.addAll(getCommonRangeExpressionErrors());
         errors.addAll(getCommonRegexExpressionErrors());
         errors.add("syntax error at or near");
+        // Set-returning functions (SRFs) are not allowed in certain clauses
+        errors.add("set-returning functions are not allowed in WHERE");
+        errors.add("set-returning functions are not allowed in JOIN conditions");
+        errors.add("set-returning functions are not allowed in HAVING");
+        errors.add("set-returning functions are not allowed in CHECK constraints");
+        errors.add("set-returning functions are not allowed in DEFAULT expressions");
+        errors.add("set-returning functions are not allowed in index expressions");
+        errors.add("set-returning functions are not allowed in index predicates");
 
         return errors;
     }

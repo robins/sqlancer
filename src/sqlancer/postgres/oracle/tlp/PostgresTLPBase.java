@@ -13,7 +13,7 @@ import sqlancer.common.oracle.TestOracle;
 import sqlancer.postgres.PostgresGlobalState;
 import sqlancer.postgres.PostgresSchema;
 import sqlancer.postgres.PostgresSchema.PostgresColumn;
-import sqlancer.postgres.PostgresSchema.PostgresDataType;
+
 import sqlancer.postgres.PostgresSchema.PostgresTable;
 import sqlancer.postgres.PostgresSchema.PostgresTables;
 import sqlancer.postgres.ast.PostgresColumnValue;
@@ -56,7 +56,7 @@ public class PostgresTLPBase extends TernaryLogicPartitioningOracleBase<Postgres
         List<PostgresJoin> joinStatements = new ArrayList<>();
         PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(columns);
         for (int i = 1; i < tables.size(); i++) {
-            PostgresExpression joinClause = gen.generateExpression(PostgresDataType.BOOLEAN);
+            PostgresExpression joinClause = gen.generateJoinCondition();
             PostgresTable table = Randomly.fromList(tables);
             tables.remove(table);
             PostgresJoinType options = PostgresJoinType.getRandom();
@@ -68,7 +68,7 @@ public class PostgresTLPBase extends TernaryLogicPartitioningOracleBase<Postgres
             PostgresTables subqueryTables = globalState.getSchema().getRandomTableNonEmptyTables();
             PostgresSubquery subquery = PostgresTLPBase.createSubquery(globalState, String.format("sub%d", i),
                     subqueryTables);
-            PostgresExpression joinClause = gen.generateExpression(PostgresDataType.BOOLEAN);
+            PostgresExpression joinClause = gen.generateJoinCondition();
             PostgresJoinType options = PostgresJoinType.getRandom();
             PostgresJoin j = new PostgresJoin(subquery, joinClause, options);
             joinStatements.add(j);
@@ -119,7 +119,7 @@ public class PostgresTLPBase extends TernaryLogicPartitioningOracleBase<Postgres
                 .collect(Collectors.toList()));
         select.setFetchColumns(columns);
         if (Randomly.getBoolean()) {
-            select.setWhereClause(gen.generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(gen.generateWhereCondition());
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
             select.setOrderByClauses(gen.generateOrderBys());

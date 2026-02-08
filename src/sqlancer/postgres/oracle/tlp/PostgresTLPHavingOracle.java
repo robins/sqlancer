@@ -7,7 +7,7 @@ import java.util.List;
 import sqlancer.ComparatorHelper;
 import sqlancer.Randomly;
 import sqlancer.postgres.PostgresGlobalState;
-import sqlancer.postgres.PostgresSchema.PostgresDataType;
+
 import sqlancer.postgres.PostgresVisitor;
 import sqlancer.postgres.ast.PostgresExpression;
 import sqlancer.postgres.gen.PostgresCommon;
@@ -27,7 +27,7 @@ public class PostgresTLPHavingOracle extends PostgresTLPBase {
 
     protected void havingCheck() throws SQLException {
         if (Randomly.getBoolean()) {
-            select.setWhereClause(gen.generateExpression(PostgresDataType.BOOLEAN));
+            select.setWhereClause(gen.generateWhereCondition());
         }
         select.setGroupByExpressions(gen.generateExpressions(Randomly.smallNumber() + 1));
         select.setHavingClause(null);
@@ -53,7 +53,7 @@ public class PostgresTLPHavingOracle extends PostgresTLPBase {
 
     @Override
     protected PostgresExpression generatePredicate() {
-        return gen.generateHavingClause();
+        return gen.generateHavingCondition();
     }
 
     @Override

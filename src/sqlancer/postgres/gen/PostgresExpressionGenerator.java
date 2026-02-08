@@ -704,6 +704,48 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         return this;
     }
 
+    /**
+     * Generate a boolean expression suitable for WHERE clauses.
+     * Set-returning functions are not allowed in WHERE clauses in PostgreSQL.
+     */
+    public PostgresExpression generateWhereCondition() {
+        boolean previousSetting = allowSetReturningFunctions;
+        allowSetReturningFunctions = false;
+        try {
+            return generateExpression(0, PostgresDataType.BOOLEAN);
+        } finally {
+            allowSetReturningFunctions = previousSetting;
+        }
+    }
+
+    /**
+     * Generate a boolean expression suitable for HAVING clauses.
+     * Set-returning functions are not allowed in HAVING clauses in PostgreSQL.
+     */
+    public PostgresExpression generateHavingCondition() {
+        boolean previousSetting = allowSetReturningFunctions;
+        allowSetReturningFunctions = false;
+        try {
+            return generateHavingClause();
+        } finally {
+            allowSetReturningFunctions = previousSetting;
+        }
+    }
+
+    /**
+     * Generate a boolean expression suitable for JOIN ON conditions.
+     * Set-returning functions are not allowed in JOIN conditions in PostgreSQL.
+     */
+    public PostgresExpression generateJoinCondition() {
+        boolean previousSetting = allowSetReturningFunctions;
+        allowSetReturningFunctions = false;
+        try {
+            return generateExpression(0, PostgresDataType.BOOLEAN);
+        } finally {
+            allowSetReturningFunctions = previousSetting;
+        }
+    }
+
     public static PostgresSubquery createSubquery(PostgresGlobalState globalState, String name, PostgresTables tables) {
         List<PostgresExpression> columns = new ArrayList<>();
         PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState).setColumns(tables.getColumns());
@@ -715,7 +757,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
                 .collect(Collectors.toList()));
         select.setFetchColumns(columns);
         if (Randomly.getBoolean()) {
-            select.setWhereClause(gen.generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(gen.generateWhereCondition());
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
             select.setOrderByClauses(gen.generateOrderBys());
@@ -942,7 +984,7 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         if (increase) {
             select.setWhereClause(null);
         } else {
-            select.setWhereClause(generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(generateWhereCondition());
         }
         return increase;
     }
@@ -960,11 +1002,11 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
     boolean mutateHaving(PostgresSelect select) {
         if (select.getGroupByExpressions().isEmpty()) {
             select.setGroupByExpressions(select.getFetchColumns());
-            select.setHavingClause(generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setHavingClause(generateHavingCondition());
             return false;
         } else {
             if (select.getHavingClause() == null) {
-                select.setHavingClause(generateExpression(0, PostgresDataType.BOOLEAN));
+                select.setHavingClause(generateHavingCondition());
                 return false;
             } else {
                 select.setHavingClause(null);
@@ -975,10 +1017,10 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     boolean mutateAnd(PostgresSelect select) {
         if (select.getWhereClause() == null) {
-            select.setWhereClause(generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(generateWhereCondition());
         } else {
             PostgresExpression newWhere = new PostgresBinaryLogicalOperation(select.getWhereClause(),
-                    generateExpression(0, PostgresDataType.BOOLEAN), BinaryLogicalOperator.AND);
+                    generateWhereCondition(), BinaryLogicalOperator.AND);
             select.setWhereClause(newWhere);
         }
         return false;
@@ -986,11 +1028,11 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
 
     boolean mutateOr(PostgresSelect select) {
         if (select.getWhereClause() == null) {
-            select.setWhereClause(generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(generateWhereCondition());
             return false;
         } else {
             PostgresExpression newWhere = new PostgresBinaryLogicalOperation(select.getWhereClause(),
-                    generateExpression(0, PostgresDataType.BOOLEAN), BinaryLogicalOperator.OR);
+                    generateWhereCondition(), BinaryLogicalOperator.OR);
             select.setWhereClause(newWhere);
             return true;
         }

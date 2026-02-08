@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import sqlancer.Randomly;
 import sqlancer.postgres.PostgresGlobalState;
-import sqlancer.postgres.PostgresSchema.PostgresDataType;
+
 import sqlancer.postgres.PostgresSchema.PostgresTables;
 import sqlancer.postgres.ast.PostgresConstant;
 import sqlancer.postgres.ast.PostgresExpression;
@@ -36,7 +36,7 @@ public final class PostgresRandomQueryGenerator {
                 .collect(Collectors.toList()));
         select.setFetchColumns(columns);
         if (Randomly.getBoolean()) {
-            select.setWhereClause(gen.generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(gen.generateWhereCondition());
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
             select.setGroupByExpressions(gen.generateExpressions(Randomly.smallNumber() + 1));
@@ -45,7 +45,7 @@ public final class PostgresRandomQueryGenerator {
                 select.setGroupByDistinct(true);
             }
             if (Randomly.getBoolean()) {
-                select.setHavingClause(gen.generateHavingClause());
+                select.setHavingClause(gen.generateHavingCondition());
             }
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
@@ -86,7 +86,7 @@ public final class PostgresRandomQueryGenerator {
                 .collect(Collectors.toList()));
         select.setFetchColumns(columns);
         if (Randomly.getBoolean()) {
-            select.setWhereClause(gen.generateExpression(0, PostgresDataType.BOOLEAN));
+            select.setWhereClause(gen.generateWhereCondition());
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
             select.setGroupByExpressions(gen.generateExpressions(Randomly.smallNumber() + 1));
@@ -94,7 +94,7 @@ public final class PostgresRandomQueryGenerator {
                 select.setGroupByDistinct(true);
             }
             if (Randomly.getBoolean()) {
-                select.setHavingClause(gen.generateHavingClause());
+                select.setHavingClause(gen.generateHavingCondition());
             }
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
