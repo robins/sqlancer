@@ -1,5 +1,7 @@
 package sqlancer.postgres.gen;
 
+import java.io.File;
+
 import sqlancer.common.query.ExpectedErrors;
 import sqlancer.common.query.SQLQueryAdapter;
 import sqlancer.postgres.PostgresGlobalState;
@@ -31,15 +33,26 @@ public class PostgresTableSpaceGenerator {
         StringBuilder sb = new StringBuilder();
         int tableSpaceNum = globalState.getRandomly().getInteger(1, Integer.MAX_VALUE);
 
+        // Get the validated base path from options and append the tablespace number
+        PostgresOptions options = globalState.getDbmsSpecificOptions();
+        String path = options.getTablespacePath() + tableSpaceNum;
+
+        // Create the directory before attempting to create the tablespace
+        // PostgreSQL requires the directory to exist and be empty
+        File tablespaceDir = new File(path);
+        if (!tablespaceDir.exists()) {
+            if (!tablespaceDir.mkdirs()) {
+                // If we can't create the directory, skip tablespace generation
+                // to avoid infinite retry loops
+                return null;
+            }
+        }
+
         // CREATE TABLESPACE syntax
         sb.append("CREATE TABLESPACE ");
         sb.append("tablespace");
         sb.append(tableSpaceNum);
         sb.append(" LOCATION '");
-
-        // Get the validated base path from options and append the tablespace number
-        PostgresOptions options = globalState.getDbmsSpecificOptions();
-        String path = options.getTablespacePath() + tableSpaceNum;
 
         // Convert backslashes to forward slashes for PostgreSQL
         path = path.replace('\\', '/');
