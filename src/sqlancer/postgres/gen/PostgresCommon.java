@@ -494,6 +494,7 @@ public final class PostgresCommon {
             errors.add("exclusion constraints are not supported on partitioned tables");
             errors.add("The exclusion operator must be related to the index operator class for the constraint");
             errors.add("could not create exclusion constraint");
+            errors.add("syntax error at or near");
             if (Randomly.getBoolean()) {
                 sb.append(" WHERE ");
                 sb.append("(");
@@ -516,7 +517,15 @@ public final class PostgresCommon {
     }
 
     private static void appendOperator(StringBuilder sb, List<String> operators) {
-        sb.append(Randomly.fromList(operators));
+        // Filter out operators that cause syntax errors in EXCLUDE clauses
+        List<String> validOperators = operators.stream()
+                .filter(op -> op.matches(".*[a-zA-Z].*") || op.equals("=") || op.equals("<>") || op.equals("<") || op.equals(">") || op.equals("<=") || op.equals(">=") || op.equals("&&") || op.equals("<<") || op.equals(">>") || op.equals("&<") || op.equals("&>") || op.equals("-|-") || op.equals("@>") || op.equals("<@"))
+                .collect(Collectors.toList());
+        if (validOperators.isEmpty()) {
+            sb.append("=");
+        } else {
+            sb.append(Randomly.fromList(validOperators));
+        }
     }
 
     // complete

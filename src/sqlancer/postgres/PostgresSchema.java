@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.postgresql.util.PSQLException;
 
@@ -321,6 +322,16 @@ public class PostgresSchema extends AbstractSchema<PostgresGlobalState, Postgres
 
     public PostgresTables getRandomTableNonEmptyTables() {
         return new PostgresTables(Randomly.nonEmptySubset(getDatabaseTables()));
+    }
+
+    public PostgresTables getRandomNonTemporaryTables() {
+        List<PostgresTable> nonTempTables = getDatabaseTables().stream()
+                .filter(t -> t.getTableType() != PostgresTable.TableType.TEMPORARY)
+                .collect(Collectors.toList());
+        if (nonTempTables.isEmpty()) {
+            return new PostgresTables(Randomly.nonEmptySubset(getDatabaseTables()));
+        }
+        return new PostgresTables(Randomly.nonEmptySubset(nonTempTables));
     }
 
     public String getDatabaseName() {

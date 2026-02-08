@@ -69,7 +69,12 @@ public final class PostgresViewGenerator {
             sb.append(")");
         }
         sb.append(" AS (");
-        PostgresSelect select = PostgresRandomQueryGenerator.createRandomQuery(nrColumns, globalState);
+        PostgresSelect select;
+        if (materialized) {
+            select = PostgresRandomQueryGenerator.createRandomQueryForMaterializedView(nrColumns, globalState);
+        } else {
+            select = PostgresRandomQueryGenerator.createRandomQuery(nrColumns, globalState);
+        }
         sb.append(PostgresVisitor.asString(select));
         sb.append(")");
         if (Randomly.getBoolean() && !materialized && !recursive) {
