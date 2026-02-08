@@ -24,6 +24,8 @@ public class StateToReproduce implements Serializable {
 
     public String databaseVersion;
 
+    protected String oracleName;
+
     protected long seedValue;
 
     String exception;
@@ -95,6 +97,14 @@ public class StateToReproduce implements Serializable {
 
     public long getSeedValue() {
         return seedValue;
+    }
+
+    public String getOracleName() {
+        return oracleName;
+    }
+
+    public void setOracleName(String oracleName) {
+        this.oracleName = oracleName;
     }
 
     /**

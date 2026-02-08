@@ -35,12 +35,15 @@ public class SQLLoggableFactory extends LoggableFactory {
     }
 
     @Override
-    protected Loggable infoToLoggable(String time, String databaseName, String databaseVersion, long seedValue) {
+    protected Loggable infoToLoggable(String time, String databaseName, String databaseVersion, long seedValue, String oracleName) {
         StringBuilder sb = new StringBuilder();
         sb.append("-- Time: ").append(time).append("\n");
         sb.append("-- Database: ").append(databaseName).append("\n");
         sb.append("-- Database version: ").append(databaseVersion).append("\n");
         sb.append("-- seed value: ").append(seedValue).append("\n");
+        if (oracleName != null && !oracleName.isEmpty()) {
+            sb.append("-- Oracle: ").append(oracleName).append("\n");
+        }
         return new LoggedString(sb.toString());
     }
 

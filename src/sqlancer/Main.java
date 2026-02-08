@@ -330,7 +330,7 @@ public final class Main {
             StringBuilder sb = new StringBuilder();
 
             sb.append(databaseProvider.getLoggableFactory()
-                    .getInfo(state.getDatabaseName(), state.getDatabaseVersion(), state.getSeedValue()).getLogString());
+                    .getInfo(state.getDatabaseName(), state.getDatabaseVersion(), state.getSeedValue(), state.getOracleName()).getLogString());
 
             for (Query<?> s : state.getStatements()) {
                 sb.append(databaseProvider.getLoggableFactory().createLoggable(s.getLogString()).getLogString());
@@ -457,6 +457,15 @@ public final class Main {
                 state.setConnection(con);
                 state.setStateLogger(logger);
                 state.setManager(manager);
+                // Set oracle name for logging
+                List<?> oracleFactories = command.getTestOracleFactory();
+                if (oracleFactories != null && !oracleFactories.isEmpty()) {
+                    String oracleNames = oracleFactories.stream()
+                            .map(Object::toString)
+                            .reduce((a, b) -> a + ", " + b)
+                            .orElse("");
+                    stateToRepro.setOracleName(oracleNames);
+                }
                 if (options.logEachSelect()) {
                     logger.writeCurrent(state.getState());
                 }
