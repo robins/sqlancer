@@ -93,8 +93,8 @@ public final class ComparatorHelper {
             String firstQueryString = String.format(queryFormatString, originalQueryString, resultSet.size());
             String combinedQueryString = String.join(";", combinedString);
             String secondQueryString = String.format(queryFormatString, combinedQueryString, secondResultSet.size());
-            state.getState().getLocalState()
-                    .log(String.format("%s" + System.lineSeparator() + "%s", firstQueryString, secondQueryString));
+            state.getState().getLocalState().log(firstQueryString);
+            state.getState().getLocalState().log(secondQueryString);
             String assertionMessage = String.format(
                     "The size of the result sets mismatch (%d and %d)!" + System.lineSeparator()
                             + "First query: \"%s\", whose cardinality is: %d" + System.lineSeparator()
@@ -119,8 +119,8 @@ public final class ComparatorHelper {
             String secondQueryString = String.format(queryFormatString, String.join(";", combinedString),
                     secondResultSetMisses);
             // update the SELECT queries to be logged at the bottom of the error log file
-            state.getState().getLocalState()
-                    .log(String.format("%s" + System.lineSeparator() + "%s", firstQueryString, secondQueryString));
+            state.getState().getLocalState().log(firstQueryString);
+            state.getState().getLocalState().log(secondQueryString);
             String assertionMessage = String.format("The content of the result sets mismatch!" + System.lineSeparator()
                     + "First query : \"%s\"" + System.lineSeparator() + "Second query: \"%s\"", originalQueryString,
                     secondQueryString);
