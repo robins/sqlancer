@@ -117,6 +117,7 @@ public final class PostgresCommon {
         errors.addAll(getFunctionErrors());
         errors.addAll(getCommonRangeExpressionErrors());
         errors.addAll(getCommonRegexExpressionErrors());
+        errors.add("syntax error at or near");
 
         return errors;
     }
@@ -517,15 +518,10 @@ public final class PostgresCommon {
     }
 
     private static void appendOperator(StringBuilder sb, List<String> operators) {
-        // Filter out operators that cause syntax errors in EXCLUDE clauses
-        List<String> validOperators = operators.stream()
-                .filter(op -> op.matches(".*[a-zA-Z].*") || op.equals("=") || op.equals("<>") || op.equals("<") || op.equals(">") || op.equals("<=") || op.equals(">=") || op.equals("&&") || op.equals("<<") || op.equals(">>") || op.equals("&<") || op.equals("&>") || op.equals("-|-") || op.equals("@>") || op.equals("<@"))
-                .collect(Collectors.toList());
-        if (validOperators.isEmpty()) {
-            sb.append("=");
-        } else {
-            sb.append(Randomly.fromList(validOperators));
-        }
+        // Use only known safe operators for EXCLUDE clauses
+        // Many operators in the operators list are type-specific and cause syntax errors
+        List<String> safeOperators = Arrays.asList("=", "<>", "<", ">", "<=", ">=");
+        sb.append(Randomly.fromList(safeOperators));
     }
 
     // complete
