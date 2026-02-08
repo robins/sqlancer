@@ -196,6 +196,7 @@ public final class PostgresCommon {
          */
         errors.add(Pattern.compile("encoding conversion from SQL_ASCII to \\w+ not supported"));
         errors.add(Pattern.compile("encoding conversion from \\w+ to SQL_ASCII not supported"));
+        errors.add(Pattern.compile("relation \".*\" does not exist"));
 
         return errors;
     }
