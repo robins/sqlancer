@@ -123,8 +123,10 @@ public final class PostgresMergeGenerator {
                     sb.append(", ");
                 }
                 // INSERT values can only use source columns
-                PostgresExpression value = PostgresExpressionGenerator.generateExpression(globalState,
-                        sourceColumnsAliased, insertColumns.get(i).getType());
+                PostgresExpressionGenerator gen = new PostgresExpressionGenerator(globalState)
+                        .setColumns(sourceColumnsAliased)
+                        .allowSetReturningFunctions(false);
+                PostgresExpression value = gen.generateExpression(insertColumns.get(i).getType());
                 sb.append(PostgresVisitor.asString(value));
             }
             sb.append(")");

@@ -136,6 +136,7 @@ public final class PostgresInsertGenerator {
                             columns.get(i).getType());
                 } else {
                     generateConstant = new PostgresExpressionGenerator(globalState)
+                            .allowSetReturningFunctions(false)
                             .generateExpression(columns.get(i).getType());
                 }
                 sb.append(PostgresVisitor.asString(generateConstant));

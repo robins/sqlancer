@@ -126,6 +126,9 @@ public final class PostgresCommon {
         errors.add("set-returning functions are not allowed in DEFAULT expressions");
         errors.add("set-returning functions are not allowed in index expressions");
         errors.add("set-returning functions are not allowed in index predicates");
+        errors.add("set-returning functions are not allowed in VALUES");
+        errors.add("set-returning functions are not allowed in RETURNING");
+        errors.add("set-returning functions are not allowed in MERGE WHEN conditions");
         errors.add("recovery is not in progress");
         errors.add("count must be greater than zero");
         errors.add("invalid name syntax");
@@ -209,6 +212,9 @@ public final class PostgresCommon {
         errors.add(Pattern.compile("encoding conversion from SQL_ASCII to \\w+ not supported"));
         errors.add(Pattern.compile("encoding conversion from \\w+ to SQL_ASCII not supported"));
         errors.add(Pattern.compile("relation \".*\" does not exist"));
+        // Handle function overload mismatches due to SQLancer's unified INT type
+        // (smallint, integer, bigint all map to INT, but functions may require specific types)
+        errors.add(Pattern.compile("function \\w+\\(.*\\) does not exist"));
 
         return errors;
     }
@@ -229,6 +235,7 @@ public final class PostgresCommon {
         errors.add("out of range");
         errors.add("malformed range literal");
         errors.add("result of range union would not be contiguous");
+        errors.add("invalid range bound flags"); // e.g., int4range(a, b, invalid_string)
 
         return errors;
     }

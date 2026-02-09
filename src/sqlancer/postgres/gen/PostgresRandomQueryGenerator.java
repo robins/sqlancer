@@ -42,7 +42,7 @@ public final class PostgresRandomQueryGenerator {
             select.setWhereClause(gen.generateWhereCondition());
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
-            select.setGroupByExpressions(gen.generateExpressions(Randomly.smallNumber() + 1));
+            select.setGroupByExpressions(select.getFetchColumns());
             // PostgreSQL 14: GROUP BY DISTINCT
             if (Randomly.getBoolean()) {
                 select.setGroupByDistinct(true);
@@ -100,7 +100,7 @@ public final class PostgresRandomQueryGenerator {
             select.setWhereClause(gen.generateWhereCondition());
         }
         if (Randomly.getBooleanWithRatherLowProbability()) {
-            select.setGroupByExpressions(gen.generateExpressions(Randomly.smallNumber() + 1));
+            select.setGroupByExpressions(select.getFetchColumns());
             if (Randomly.getBoolean()) {
                 select.setGroupByDistinct(true);
             }
