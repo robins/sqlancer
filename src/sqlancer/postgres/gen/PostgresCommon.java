@@ -193,6 +193,7 @@ public final class PostgresCommon {
 
         errors.add("negative substring length not allowed"); // substr
         errors.add("invalid mask length"); // set_masklen
+        errors.add("Escape string must be empty or one character"); // SIMILAR TO, LIKE, regexp functions
 
         return errors;
     }
