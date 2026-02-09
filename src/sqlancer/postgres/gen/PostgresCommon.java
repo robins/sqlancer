@@ -132,6 +132,15 @@ public final class PostgresCommon {
         errors.add("recovery is not in progress");
         errors.add("count must be greater than zero");
         errors.add("invalid name syntax");
+        errors.add("aggregate function calls cannot contain set-returning function calls");
+        errors.add("invalid escape string");
+        errors.add("invalid preceding or following size in window function");
+        errors.add("invalid range bound flags");
+        errors.add("lastval is not yet defined in this session");
+        errors.add("pg_event_trigger_table_rewrite_reason() can only be called in a table_rewrite event trigger function");
+        errors.add("requested length cannot be negative");
+        errors.add("syntax error at end of input");
+        errors.add("\"timeout\" must not be negative");
 
         return errors;
     }
@@ -140,6 +149,26 @@ public final class PostgresCommon {
         ArrayList<Pattern> errors = new ArrayList<>();
 
         errors.add(Pattern.compile("cannot convert infinity to \\w+"));
+        errors.add(Pattern.compile(".*is not a valid encoding code"));
+        errors.add(Pattern.compile(".*is not a valid encoding name"));
+        errors.add(Pattern.compile("could not open directory \".*\": No such file or directory"));
+        errors.add(Pattern.compile("could not open file \".*\" for reading: No such file or directory"));
+        errors.add(Pattern.compile("database \".*\" does not exist"));
+        errors.add(Pattern.compile("foreign-data wrapper \".*\" does not exist"));
+        errors.add(Pattern.compile("improper relation name.*"));
+        errors.add(Pattern.compile("invalid large-object descriptor: .*"));
+        errors.add(Pattern.compile("invalid size: \".*\""));
+        errors.add(Pattern.compile("invalid type name \".*\""));
+        errors.add(Pattern.compile("invalid value for parameter \".*\": .*"));
+        errors.add(Pattern.compile("language \".*\" does not exist"));
+        errors.add(Pattern.compile("log format \".*\" is not supported"));
+        errors.add(Pattern.compile("no partition of relation \".*\" found for row"));
+        errors.add(Pattern.compile("role \".*\" does not exist"));
+        errors.add(Pattern.compile("schema \".*\" does not exist"));
+        errors.add(Pattern.compile("tablespace \".*\" already exists"));
+        errors.add(Pattern.compile("transaction ID .* is in the future"));
+        errors.add(Pattern.compile("unrecognized configuration parameter \".*\""));
+        errors.add(Pattern.compile("unrecognized privilege type: \".*\""));
         errors.addAll(getFunctionRegexErrors());
 
         return errors;

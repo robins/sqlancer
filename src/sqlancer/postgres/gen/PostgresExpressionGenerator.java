@@ -210,16 +210,28 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         case IN_OPERATION:
             return inOperation(depth + 1);
         case NOT:
-            return new PostgresPrefixOperation(generateExpression(depth + 1, PostgresDataType.BOOLEAN),
-                    PrefixOperator.NOT);
-        case BINARY_LOGICAL_OPERATOR:
-            PostgresExpression first = generateExpression(depth + 1, PostgresDataType.BOOLEAN);
-            int nr = Randomly.smallNumber() + 1;
-            for (int i = 0; i < nr; i++) {
-                first = new PostgresBinaryLogicalOperation(first,
-                        generateExpression(depth + 1, PostgresDataType.BOOLEAN), BinaryLogicalOperator.getRandom());
+            boolean previousSettingNot = allowSetReturningFunctions;
+            allowSetReturningFunctions = false;
+            try {
+                return new PostgresPrefixOperation(generateExpression(depth + 1, PostgresDataType.BOOLEAN),
+                        PrefixOperator.NOT);
+            } finally {
+                allowSetReturningFunctions = previousSettingNot;
             }
-            return first;
+        case BINARY_LOGICAL_OPERATOR:
+            boolean previousSettingLog = allowSetReturningFunctions;
+            allowSetReturningFunctions = false;
+            try {
+                PostgresExpression first = generateExpression(depth + 1, PostgresDataType.BOOLEAN);
+                int nr = Randomly.smallNumber() + 1;
+                for (int i = 0; i < nr; i++) {
+                    first = new PostgresBinaryLogicalOperation(first,
+                            generateExpression(depth + 1, PostgresDataType.BOOLEAN), BinaryLogicalOperator.getRandom());
+                }
+                return first;
+            } finally {
+                allowSetReturningFunctions = previousSettingLog;
+            }
         case BINARY_COMPARISON:
             PostgresDataType dataType = getMeaningfulType();
             return generateComparison(depth, dataType);
