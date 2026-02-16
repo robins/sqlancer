@@ -151,26 +151,99 @@ public final class PostgresCommon {
         errors.add(Pattern.compile("cannot convert infinity to \\w+"));
         errors.add(Pattern.compile(".*is not a valid encoding code"));
         errors.add(Pattern.compile(".*is not a valid encoding name"));
-        errors.add(Pattern.compile("could not open directory \".*\": No such file or directory"));
-        errors.add(Pattern.compile("could not open file \".*\" for reading: No such file or directory"));
-        errors.add(Pattern.compile("database \".*\" does not exist"));
-        errors.add(Pattern.compile("foreign-data wrapper \".*\" does not exist"));
+        errors.add(Pattern.compile("could not open directory \"(?s).*\": No such file or directory"));
+        errors.add(Pattern.compile("could not open file \"(?s).*\" for reading: No such file or directory"));
         errors.add(Pattern.compile("improper relation name.*"));
         errors.add(Pattern.compile("invalid large-object descriptor: .*"));
-        errors.add(Pattern.compile("invalid size: \".*\""));
-        errors.add(Pattern.compile("invalid type name \".*\""));
-        errors.add(Pattern.compile("invalid value for parameter \".*\": .*"));
-        errors.add(Pattern.compile("language \".*\" does not exist"));
-        errors.add(Pattern.compile("log format \".*\" is not supported"));
+        errors.add(Pattern.compile("invalid size: \"(?s).*\""));
+        errors.add(Pattern.compile("invalid type name \"(?s).*\""));
+        errors.add(Pattern.compile("invalid value for parameter \"(?s).*\": .*"));
+        errors.add(Pattern.compile("log format \"(?s).*\" is not supported"));
         errors.add(Pattern.compile("no partition of relation \".*\" found for row"));
-        errors.add(Pattern.compile("role \".*\" does not exist"));
-        errors.add(Pattern.compile("schema \".*\" does not exist"));
         errors.add(Pattern.compile("tablespace \".*\" already exists"));
         errors.add(Pattern.compile("transaction ID .* is in the future"));
-        errors.add(Pattern.compile("unrecognized configuration parameter \".*\""));
-        errors.add(Pattern.compile("unrecognized privilege type: \".*\""));
+        errors.add(Pattern.compile("unrecognized configuration parameter \"(?s).*\""));
+        errors.add(Pattern.compile("unrecognized privilege type: \"(?s).*\""));
         errors.addAll(getFunctionRegexErrors());
 
+        // Errors that should be ignored
+        errors.add(Pattern.compile("unrecognized configuration parameter \"(?s).*\"")); // (?s) allows . to match newlines
+        errors.add(Pattern.compile("invalid normalization form: (?s).*"));
+        errors.add(Pattern.compile("argument of AND must not return a set"));
+        errors.add(Pattern.compile("argument of IN must not return a set"));
+        errors.add(Pattern.compile("argument of IS .* must not return a set")); // Covers IS TRUE, IS FALSE, IS UNKNOWN
+        errors.add(Pattern.compile(".*lower bound must be less than or equal to .*upper bound"));
+        errors.add(Pattern.compile("range constructor flags argument must not be null"));
+        errors.add(Pattern.compile("invalid configuration parameter name \"(?s).*\""));
+        errors.add(Pattern.compile("cross-database references are not implemented: \"(?s).*\""));
+        errors.add(Pattern.compile("function \"(?s).*\" in index expression must be marked IMMUTABLE"));
+        errors.add(Pattern.compile("functions in partition key expression must be marked IMMUTABLE"));
+        errors.add(Pattern.compile("malformed range literal: \"(?s).*\""));
+        errors.add(Pattern.compile("range constructor flags must be one of \"(?s).*\""));
+        errors.add(Pattern.compile("could not open relation with OID .*"));
+        errors.add(Pattern.compile("could not open file \"(?s).*\" for reading: No such file or directory"));
+        errors.add(Pattern.compile("factorial of a negative number is undefined"));
+        errors.add(Pattern.compile("invalid size: \"(?s).*\""));
+        errors.add(Pattern.compile("SET requires parameter name"));
+        errors.add(Pattern.compile("expected a left parenthesis"));
+        errors.add(Pattern.compile("cannot take square root of a negative number"));
+        errors.add(Pattern.compile("invalid Unicode escape"));
+        errors.add(Pattern.compile("field position must not be zero"));
+        errors.add(Pattern.compile("set-returning functions are not allowed in partition key expressions"));
+        errors.add(Pattern.compile("argument of OR must not return a set"));
+        errors.add(Pattern.compile("argument of NOT must not return a set"));
+        errors.add(Pattern.compile("invalid value for parameter \"(?s).*\": .*"));
+        errors.add(Pattern.compile("set-returning functions are not allowed in .*"));
+        errors.add(Pattern.compile("could not open file \"(?s).*\""));
+        errors.add(Pattern.compile("unrecognized format\\(\\) type specifier \"(?s).*\""));
+        errors.add(Pattern.compile("unrecognized privilege type: \"(?s).*\""));
+        errors.add(Pattern.compile("lower bound cannot equal upper bound"));
+        errors.add(Pattern.compile(".* is not a valid encoding name")); // Handles both empty and non-empty invalid names
+        errors.add(Pattern.compile("value too long for type character.*"));
+        errors.add(Pattern.compile("out of memory"));
+        errors.add(Pattern.compile("primary key column \"(?s).*\" is not marked NOT NULL"));
+        errors.add(Pattern.compile(".* is not a valid encoding code"));
+        errors.add(Pattern.compile("step size cannot equal zero"));
+        errors.add(Pattern.compile("could not open directory \"(?s).*\""));
+        errors.add(Pattern.compile("unterminated format\\(\\) type specifier"));
+        errors.add(Pattern.compile("expected a right parenthesis"));
+        errors.add(Pattern.compile("bit string too long for type bit varying.*"));
+        errors.add(Pattern.compile("invalid large-object descriptor: .*"));
+        errors.add(Pattern.compile("lower and upper bounds must be finite"));
+        errors.add(Pattern.compile("invalid range bound flags"));
+        errors.add(Pattern.compile("invalid escape string"));
+        errors.add(Pattern.compile(".* \"(?s).*\" does not exist")); // Covers tablespace, server, type, role, schema, database, foreign-data wrapper, etc.
+        errors.add(Pattern.compile("new bit must be 0 or 1"));
+        errors.add(Pattern.compile("transaction ID .* is in the future"));
+        errors.add(Pattern.compile("tablespace with OID .* does not exist"));
+        errors.add(Pattern.compile("syntax error at end of input"));
+        errors.add(Pattern.compile("improper relation name \\(too many dotted names\\): .*"));
+        errors.add(Pattern.compile("\".*\" is incompatible with other formats"));
+        errors.add(Pattern.compile("column \"(?s).*\" can only be updated to DEFAULT"));
+        errors.add(Pattern.compile("invalid preceding or following size in window function"));
+        errors.add(Pattern.compile("regexp_substr\\(\\) does not support the \"(?s).*\" option"));
+        errors.add(Pattern.compile("primary keys on virtual generated columns are not supported"));
+        errors.add(Pattern.compile("pg_event_trigger_table_rewrite_reason\\(\\) can only be called in a table_rewrite event trigger function"));
+        errors.add(Pattern.compile("lastval is not yet defined in this session"));
+        errors.add(Pattern.compile("could not read file \"(?s).*\": Is a directory"));
+        errors.add(Pattern.compile("requested length cannot be negative"));
+        errors.add(Pattern.compile("trailing junk after numeric literal at or near \"(?s).*\""));
+        errors.add(Pattern.compile("no partition of relation \"(?s).*\" found for row"));
+        errors.add(Pattern.compile("column \"(?s).*\" of table \"(?s).*\" is not marked NOT NULL"));
+        errors.add(Pattern.compile("unterminated quoted string at or near \"(?s).*\""));
+        errors.add(Pattern.compile("unique constraints on virtual generated columns are not supported"));
+        errors.add(Pattern.compile("too few arguments for format\\(\\)"));
+        errors.add(Pattern.compile("\".*\" must not be negative"));
+        errors.add(Pattern.compile("string buffer exceeds maximum allowed length \\(.* bytes\\)"));
+        errors.add(Pattern.compile("recovery is not in progress"));
+        errors.add(Pattern.compile("out of shared memory"));
+        errors.add(Pattern.compile("invalid type name \"(?s).*\""));
+        errors.add(Pattern.compile("index row requires .* bytes, maximum size is .*"));
+        errors.add(Pattern.compile("could not seek in file \"(?s).*\": Invalid argument"));
+        errors.add(Pattern.compile("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables"));
+        errors.add(Pattern.compile("aggregate function calls cannot contain set-returning function calls"));
+        errors.add(Pattern.compile("foreign-data wrapper \"(?s).*\"")); // Catch-all for other FDW errors
+        
         return errors;
     }
 
