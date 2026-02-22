@@ -1,0 +1,12 @@
+Exception in thread "main" com.beust.jcommander.ParameterException: "--log-each-select": couldn't convert "--password" to a boolean
+	at com.beust.jcommander.converters.BooleanConverter.convert(BooleanConverter.java:38)
+	at com.beust.jcommander.converters.BooleanConverter.convert(BooleanConverter.java:28)
+	at com.beust.jcommander.JCommander.convertValue(JCommander.java:1340)
+	at com.beust.jcommander.ParameterDescription.addValue(ParameterDescription.java:249)
+	at com.beust.jcommander.JCommander.processFixedArity(JCommander.java:920)
+	at com.beust.jcommander.JCommander.processFixedArity(JCommander.java:901)
+	at com.beust.jcommander.JCommander.parseValues(JCommander.java:731)
+	at com.beust.jcommander.JCommander.parse(JCommander.java:363)
+	at com.beust.jcommander.JCommander.parse(JCommander.java:342)
+	at sqlancer.Main.executeMain(Main.java:601)
+	at sqlancer.Main.main(Main.java:399)

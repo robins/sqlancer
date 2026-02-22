@@ -1,0 +1,18 @@
+[INFO] Linux detected: Enabling tablespace testing by default
+[2026/02/17 02:30:38] Executed 234 queries (46 queries/s; 0.20/s dbs, successful statements: 21%). Threads shut down: 0.
+[2026/02/17 02:30:43] Executed 1262 queries (205 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:30:48] Executed 1823 queries (112 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:30:53] Executed 2119 queries (59 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:30:58] Executed 2119 queries (0 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:31:03] Executed 3179 queries (212 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:31:08] Executed 4333 queries (230 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:31:13] Executed 5481 queries (229 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:31:18] Executed 6370 queries (177 queries/s; 0.00/s dbs, successful statements: 18%). Threads shut down: 0.
+[2026/02/17 02:31:23] Executed 7361 queries (198 queries/s; 0.20/s dbs, successful statements: 19%). Threads shut down: 0.
+[2026/02/17 02:31:28] Executed 7865 queries (100 queries/s; 0.00/s dbs, successful statements: 20%). Threads shut down: 0.
+Overall execution statistics
+============================
+        9k queries
+         2 databases
+       19k successfully-executed statements
+       70k unsuccessfully-executed statements

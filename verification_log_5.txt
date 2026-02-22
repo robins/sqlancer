@@ -1,0 +1,347 @@
+[2026/02/16 20:05:47] Executed 588 queries (117 queries/s; 0.20/s dbs, successful statements: 32%). Threads shut down: 0.
+[2026/02/16 20:05:52] Executed 588 queries (0 queries/s; 0.00/s dbs, successful statements: 32%). Threads shut down: 0.
+java.lang.AssertionError: SELECT ALL COUNT(*) FROM t3* CROSS JOIN t0* WHERE (((((CAST('c02f7c20-d632-483a-896f-0a4da98c316a'::uuid AS VARCHAR))||((('(-1087192039,754639239)'::int4range)*('[-1543775384,-1237868617]'::int4range)))))||(CAST(0.8830708945837931 AS VARCHAR(345)))) SIMILAR TO set_config(regexp_substr('HdcB	', 'nW', 229428723), ('685247948')::VARCHAR, (-1714543883) IS NOT NULL))
+	at sqlancer.common.query.SQLQueryAdapter.checkException(SQLQueryAdapter.java:166)
+	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:207)
+	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:177)
+	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:172)
+	at sqlancer.common.oracle.NoRECOracle.extractCounts(NoRECOracle.java:151)
+	at sqlancer.common.oracle.NoRECOracle.check(NoRECOracle.java:85)
+	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:61)
+	at sqlancer.Main$DBMSExecutor.run(Main.java:476)
+	at sqlancer.Main$2.run(Main.java:693)
+	at sqlancer.Main$2.runThread(Main.java:675)
+	at sqlancer.Main$2.run(Main.java:666)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.postgresql.util.PSQLException: ERROR: SET requires parameter name
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2676)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2366)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:356)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:496)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:413)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:333)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:319)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:295)
+	at org.postgresql.jdbc.PgStatement.executeQuery(PgStatement.java:244)
+	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:196)
+	... 12 more
+--java.lang.AssertionError: SELECT ALL COUNT(*) FROM t3* CROSS JOIN t0* WHERE (((((CAST('c02f7c20-d632-483a-896f-0a4da98c316a'::uuid AS VARCHAR))||((('(-1087192039,754639239)'::int4range)*('[-1543775384,-1237868617]'::int4range)))))||(CAST(0.8830708945837931 AS VARCHAR(345)))) SIMILAR TO set_config(regexp_substr('HdcB	', 'nW', 229428723), ('685247948')::VARCHAR, (-1714543883) IS NOT NULL))
+--	at sqlancer.common.query.SQLQueryAdapter.checkException(SQLQueryAdapter.java:166)
+--	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:207)
+--	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:177)
+--	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:172)
+--	at sqlancer.common.oracle.NoRECOracle.extractCounts(NoRECOracle.java:151)
+--	at sqlancer.common.oracle.NoRECOracle.check(NoRECOracle.java:85)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:61)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:476)
+--	at sqlancer.Main$2.run(Main.java:693)
+--	at sqlancer.Main$2.runThread(Main.java:675)
+--	at sqlancer.Main$2.run(Main.java:666)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+--	at java.base/java.lang.Thread.run(Thread.java:1583)
+--Caused by: org.postgresql.util.PSQLException: ERROR: SET requires parameter name
+--	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2676)
+--	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2366)
+--	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:356)
+--	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:496)
+--	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:413)
+--	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:333)
+--	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:319)
+--	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:295)
+--	at org.postgresql.jdbc.PgStatement.executeQuery(PgStatement.java:244)
+--	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:196)
+--	... 12 more
+--
+-- Time: 2026/02/16 20:05:57
+-- Database: db_test_0
+-- Database version: 19devel
+-- seed value: 1771234543430
+-- Oracle: NOREC
+\c test;
+DROP DATABASE IF EXISTS db_test_0;
+CREATE DATABASE db_test_0  TEMPLATE template0;
+\c db_test_0;
+CREATE TEMPORARY TABLE IF NOT EXISTS t0(c0 int4range  NULL UNIQUE) PARTITION BY HASH((upper(upper('')))xid8_ops, ('126.0.225.127')bool_ops, ('eeb56a29-b1e5-4a07-b56e-c6eee5c5fb4a'::uuid)oid_ops, (abs(CAST(pg_indexes_size('S}') AS INT)))int8_minmax_ops, (('f4809c80-78b0-4a54-ad3a-d417a69836e6'::uuid)::REAL)name_ops);
+CREATE TABLE IF NOT EXISTS t0(c0 DECIMAL , c1 REAL  UNIQUE) USING heap WITH (autovacuum_freeze_max_age=951978742, autovacuum_vacuum_threshold=1425833481, autovacuum_freeze_min_age=640049536);
+CREATE TEMPORARY TABLE t1(c0 uuid  PRIMARY KEY DEFAULT ('470da862-7ba4-4949-a8db-591b0888e15d'::uuid) NOT NULL, CHECK(((0.679765)::MONEY) NOTNULL), EXCLUDE ((+ (bttextnamecmp(('-906646145' COLLATE "en_PH.utf8"), (('2007411456')||('232.86.68.232'))))) macaddr_minmax_multi_ops NULLS LAST WITH >=, c0 DESC NULLS FIRST WITH <, c0 ASC NULLS FIRST WITH >)) INHERITS(t0) PARTITION BY LIST(('0.151.187.232')float8_minmax_ops);
+CREATE TEMP TABLE t1(LIKE t0);
+CREATE TEMPORARY TABLE t2(LIKE t0);
+CREATE UNLOGGED TABLE t3(LIKE t1);
+CREATE TEMPORARY TABLE IF NOT EXISTS t4(c0 bigserial , PRIMARY KEY(c0), EXCLUDE ((((((('0.679764989178947')||(((B'1111111111111111111111111111111110101011010100011001110110000001')||(B'1011001101101110010101110101000')))) COLLATE "en_CA.utf8"))||(CAST(0.51232976 AS MONEY)))) timestamp_bloom_ops ASC NULLS LAST WITH =, (CAST(((((((B'1101101011001100110111110011')||(B'1111111111111111111111111111111110111011110000010101110100000110')))&(((B'1000100101010110110110101100100')&(B'101011101001101100000110110000')))))#(((((B'1000011111101001100111100100100')|(B'1011001101101110010101110101000')))|(((B'1111111111111111111111111111111110100100110001111110100010100011')&(B'1111111111111111111111111111111110011010100011011100000111101000')))))) AS BOOLEAN)) int8_ops ASC WITH >=) WITH (autovacuum_vacuum_cost_limit=8421, autovacuum_vacuum_cost_delay=86, autovacuum_analyze_threshold=121860591, autovacuum_enabled=0, parallel_workers=80) WHERE (network_lt('86.127.171.151', '176.210.35.225'))) INHERITS(t3) USING heap ON COMMIT DROP ;
+CREATE TEMPORARY TABLE t4(c0 int4range , c1 inet  DEFAULT ('168.144.204.255') UNIQUE NULL) USING heap WITH (autovacuum_analyze_threshold=1913562258, parallel_workers=320, autovacuum_vacuum_scale_factor=1.0E-5, autovacuum_vacuum_threshold=1394844235);
+CREATE TEMP TABLE IF NOT EXISTS t5(LIKE t1 INCLUDING GENERATED);
+SET geqo_pool_size=DEFAULT;
+INSERT INTO t0(c0) VALUES(0.587476679402446);
+INSERT INTO t4(c1) VALUES('197.103.76.170');
+UPDATE t0 SET c1=0.5123297328834907 WHERE ((((('ꊌN')::VARCHAR!~*CAST('eR' AS VARCHAR(831)))AND((((FALSE)OR(FALSE)))::BOOLEAN)))AND(((((('[-1321353401,685247948]'::int4range)+('[-825852851,-333008222]'::int4range)))-((('(243306272,387333387)'::int4range)+('(-1739859580,894715293]'::int4range)))))::BOOLEAN)) RETURNING OLD.*;
+UPDATE t3 SET c1=(0.62074) WHERE (FALSE) IS NOT UNKNOWN RETURNING '71.202.225.202';
+CREATE STATISTICS  IF NOT EXISTS s0 ON c0, c1 FROM t4;
+DISCARD ALL;
+DELETE FROM ONLY t0 WHERE (((((B'1110100111110111000011001010011')|(B'1111111111111111111111111111111111101100001001101011001010100010')))|(((B'1001110010111111111000011100001')>>(B'1101100111110100010000100011101')))))::VARCHAR(553)~*((pg_read_file('Z-', FALSE))||((((('')||('566051d1-1563-4934-8415-5f03fa2b00a2'::uuid)))LIKE((('866868804')||(-906646145)))))) RETURNING 0.18126379;
+DELETE FROM ONLY t3 WHERE ((upper(CAST((0.679765)::MONEY AS VARCHAR(936))))LIKE(((lower('bR'))||(t3.c1)))) RETURNING 'a7d5848e-29ce-4468-b59c-64f9239dc122'::uuid;
+INSERT INTO t0(c0) VALUES(0.14214600780671627), (0.0036231508872357487), (0.029649961226194232) ON CONFLICT (c0) DO NOTHING;
+INSERT INTO t0(c1) VALUES(0.8609637136823671);
+ANALYZE( VERBOSE);
+ANALYZE;
+REINDEX DATABASE db_test_0;
+INSERT INTO t0(c1, c0) VALUES(0.5963853433344731, 0.8706258961031293), (0.13914507454163327, 0.10285938067291234), (int28pl(int8mi(778233590, 2007269416), length('0.8609637136823671')), 0.49100564866459817) RETURNING '8ee69243-106d-4441-9a7c-0b6783511999'::uuid;
+INSERT INTO t0(c1, c0) VALUES(0.7511926107879148, 0.3727829625664576);
+DELETE FROM t0 WHERE (0.7511926)::VARCHAR~*upper(('V-+ONP膦J6' COLLATE "en_ZW.utf8")) RETURNING OLD.c1;
+INSERT INTO t3(c1, c0) VALUES(0.1869515272553729, 0.8212996707788567), (-1.530402653E9, 0.25594468873080933), (CAST(CAST(4.5634976E8 AS MONEY) AS INT), 0.14543490942985482) RETURNING NEW.*;
+INSERT INTO t3(c0, c1) VALUES(0.7798680720626353, ((1.962641E9)::MONEY)::INT), (0.46498491055735924, 0.29145545260426076), (0.9943597421522136, 0.785301180055478), (0.04276207510684604, 0.42985406654171276), (0.043948437884752556, 0.41019810866996853) RETURNING ((- (+ (((-181052126)*(732348848)))))/(104));
+INSERT INTO t3(c1) VALUES(0.17002991);
+UPDATE t3 SET c0=0.5073307242427826;
+UPDATE t3 SET c1=0.30664664950775056, c0=0.06873573533676447 WHERE (((('' COLLATE "en_BW.utf8"))||((('(-1758699243,1505176488]'::int4range)-('(510355935,1152085348]'::int4range)))) COLLATE "en_ZA.utf8")!~lower(('>B2A#' COLLATE "C.utf8"));
+UPDATE t3 SET c1=0.29145545260426076 WHERE FALSE RETURNING CAST(0.5642458 AS MONEY);
+DISCARD TEMP;
+SET CONSTRAINTS ALL DEFERRED;
+DISCARD TEMPORARY;
+INSERT INTO t0(c0, c1) VALUES(0.658875543858147, 0.2664443696747576), (0.7144288564139636, 0.9724458181219849), (NULL, 0.7936334868252637);
+INSERT INTO t0(c1) VALUES(-8.25852851E8), (((CAST('207.132.202.163' AS INT))/(737))), (0.1490075538895692) RETURNING NEW.*;
+INSERT INTO t0(c1, c0) VALUES(0.18215852108292785, 0.4440311018602907) RETURNING 0.7204485056440463;
+DELETE FROM t3 WHERE NOT ((((((B'1111111111111111111111111111111110101101001001011001010000100000')|(B'11100011001110011001011000101')))|(((B'1111111111111111111111111111111111011010011001111001011111000110')&(B'1100010000111010011110010010111')))))::BOOLEAN);
+DELETE FROM ONLY t3 WHERE (0.12112558) BETWEEN SYMMETRIC (t3.c1) AND (0.17002990871968926) RETURNING ((CAST(t3.c1 AS INT))^(length((('4H')||(-2068730684)))));
+CLUSTER t3;
+CLUSTER ;
+CREATE STATISTICS  IF NOT EXISTS s0 (mcv, ndistinct, dependencies) ON c0, c1 FROM t3;
+INSERT INTO t3(c0, c1) VALUES(0.5576037906117213, ((((((('[-630745146,666777369)'::int4range)+('(-141570419,1437265043]'::int4range)))+((('(-1567180542,-928943893)'::int4range)*('[456349772,1170110410]'::int4range)))))::INT)^(((0.4100222)::MONEY)::INT))), (0.16683964518349126, 0.7128593032413172), (0.15401910755285453, 0.11362532346047494) RETURNING int8(+ (int8mul(-294058070, 1187492402)));
+INSERT INTO t0(c0) VALUES(0.5710421622070077);
+CREATE UNIQUE INDEX i0 ON t0(((((((((('(-858566325,1717144813)'::int4range)*('(-630745146,1653250256)'::int4range)))-((('[-287858924,456349772]'::int4range)-('[-1144955642,1497741443)'::int4range)))))*((((('[-1733350268,1724795857]'::int4range)*('(248555324,1987706784]'::int4range)))*((('[-1419550698,2133595616)'::int4range)-('[-324032513,-294058070]'::int4range)))))))-((((((('[-1494094087,894715293)'::int4range)-('(-1419550698,-298857584]'::int4range)))+((('[-2110595763,1556929190]'::int4range)*('(-1701985816,229428723)'::int4range)))))*(((('[-1307406249,-294058070)'::int4range)*('(4613298,849056332]'::int4range)))::int4range))))), c1) WHERE to_char(CAST('a44cc640-9603-4141-9f84-03a3d99fb5dc'::uuid AS INT), CAST(B'1110110011110011111111110100000' AS VARCHAR))!~*((pg_stat_get_backend_activity(262545593))||('e69624a7-dcbf-4654-818c-87670f0dd7a8'::uuid));
+CREATE UNIQUE INDEX i0 ON t0 USING BTREE(c0 DESC, c0 DESC NULLS LAST);
+MERGE INTO t3 AS target USING t0 AS source ON ((((('[732348848,1179349737]'::int4range)+('[906419642,2063996873]'::int4range)))-((('[-294058070,643991794)'::int4range)*('[-333008222,1887957151]'::int4range))))) IN ((((('(-1739859580,0]'::int4range)-('[-1572600049,-1217317562)'::int4range)))*((('(-2091338212,1125497651)'::int4range)-('[1266726886,1632262014]'::int4range))))) WHEN MATCHED AND TRUE THEN UPDATE SET c0 = source.c0, c1 = target.c1;
+INSERT INTO t3(c1) VALUES(4.56349772E8) RETURNING NEW.c1;
+CREATE INDEX i0 ON t3(((0.8051179)::MONEY) DESC) INCLUDE(c0);
+CREATE UNIQUE INDEX i1 ON ONLY t0 USING HASH(c0) WHERE ((((B'1101010000100101001100000111100')>>(B'11100111101111001000101110101'))) NOT IN (B'1001110010111111111000011100001', ((B'1110110100001010011100111100')>>(B'110011101010110101111001000100')))) IS UNKNOWN;
+CREATE INDEX i1 ON t0((lo_tell(length(''))) ASC);
+CREATE UNIQUE INDEX i1 ON ONLY t0 USING HASH(c1) WHERE ((+ (((20472630)^(25438432))))::VARCHAR(801) SIMILAR TO ((((('<g幄9F(N' COLLATE "en_AU.utf8"))||('6c6ffe4c-ce19-4d53-9b24-4852e77d05ed'::uuid)))||((((('(-1799654769,1063827861]'::int4range)-('[5800257,134074127]'::int4range)))+((('[-1,1505176488]'::int4range)*('[-102326681,1219617693]'::int4range)))))));
+CREATE UNIQUE INDEX i0 ON ONLY t3(c1 NULLS LAST, (- (- (-942486120))), (abs(- (- (1437265043)))) poly_ops DESC);
+CREATE INDEX i1 ON ONLY t0((((((('{q' COLLATE "C") SIMILAR TO ('2063996873' COLLATE "en_CA.utf8")))OR(((('' SIMILAR TO '-1144955642'))AND('!\r1Tv5춘'!~'1187492402')))))::REAL), ('166.36.251.2') oidvector_ops DESC, (('126.77.185.6')::BOOLEAN) DESC) INCLUDE(c0, c1);
+CREATE UNIQUE INDEX i1 ON ONLY t0(c1 ASC);
+RESET ALL;
+DROP INDEX IF EXISTS i0, i0;
+COMMIT;
+SET SESSION statement_timeout = 5000;\n;
+
+[2026/02/16 20:05:57] Executed 636 queries (9 queries/s; 0.00/s dbs, successful statements: 32%). Threads shut down: 1.
+[INFO] Linux detected: Enabling tablespace testing by default
+java.lang.AssertionError: SELECT ALL * FROM t3 RIGHT OUTER JOIN (SELECT 0.31031900870448514 FROM t0, t3 WHERE has_function_privilege('+༆|B5༆x/', ((CAST('' AS VARCHAR))||(CAST(0.8665876 AS MONEY))))) AS sub0 ON ((((('746723574')::VARCHAR COLLATE "en_ZW.utf8") COLLATE "en_IE.utf8"))LIKE(CAST(- (t3.c0) AS VARCHAR(385)))) WHERE NOT (((((((((NOT (TRUE))AND((TRUE) IS TRUE)))AND(CAST('4ed22cc4-6ca3-464b-8ef5-eec7efc44513'::uuid AS VARCHAR(245))!~*(('g')||(0.4471720686499664)))))AND((('BK4SꉅLR&')LIKE(upper('I!rC'))))))OR((CAST(t3.c0 AS VARCHAR(427)) SIMILAR TO ''))))
+	at sqlancer.common.query.SQLQueryAdapter.checkException(SQLQueryAdapter.java:166)
+	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:207)
+	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:177)
+	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:172)
+	at sqlancer.common.oracle.NoRECOracle.countRows(NoRECOracle.java:127)
+	at sqlancer.common.oracle.NoRECOracle.check(NoRECOracle.java:86)
+	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:61)
+	at sqlancer.Main$DBMSExecutor.run(Main.java:476)
+	at sqlancer.Main$2.run(Main.java:693)
+	at sqlancer.Main$2.runThread(Main.java:675)
+	at sqlancer.Main$2.run(Main.java:666)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.postgresql.util.PSQLException: ERROR: expected a left parenthesis
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2676)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2366)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:356)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:496)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:413)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:333)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:319)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:295)
+	at org.postgresql.jdbc.PgStatement.executeQuery(PgStatement.java:244)
+	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:196)
+	... 12 more
+--java.lang.AssertionError: SELECT ALL * FROM t3 RIGHT OUTER JOIN (SELECT 0.31031900870448514 FROM t0, t3 WHERE has_function_privilege('+༆|B5༆x/', ((CAST('' AS VARCHAR))||(CAST(0.8665876 AS MONEY))))) AS sub0 ON ((((('746723574')::VARCHAR COLLATE "en_ZW.utf8") COLLATE "en_IE.utf8"))LIKE(CAST(- (t3.c0) AS VARCHAR(385)))) WHERE NOT (((((((((NOT (TRUE))AND((TRUE) IS TRUE)))AND(CAST('4ed22cc4-6ca3-464b-8ef5-eec7efc44513'::uuid AS VARCHAR(245))!~*(('g')||(0.4471720686499664)))))AND((('BK4SꉅLR&')LIKE(upper('I!rC'))))))OR((CAST(t3.c0 AS VARCHAR(427)) SIMILAR TO ''))))
+--	at sqlancer.common.query.SQLQueryAdapter.checkException(SQLQueryAdapter.java:166)
+--	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:207)
+--	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:177)
+--	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:172)
+--	at sqlancer.common.oracle.NoRECOracle.countRows(NoRECOracle.java:127)
+--	at sqlancer.common.oracle.NoRECOracle.check(NoRECOracle.java:86)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:61)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:476)
+--	at sqlancer.Main$2.run(Main.java:693)
+--	at sqlancer.Main$2.runThread(Main.java:675)
+--	at sqlancer.Main$2.run(Main.java:666)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+--	at java.base/java.lang.Thread.run(Thread.java:1583)
+--Caused by: org.postgresql.util.PSQLException: ERROR: expected a left parenthesis
+--	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2676)
+--	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2366)
+--	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:356)
+--	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:496)
+--	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:413)
+--	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:333)
+--	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:319)
+--	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:295)
+--	at org.postgresql.jdbc.PgStatement.executeQuery(PgStatement.java:244)
+--	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:196)
+--	... 12 more
+--
+-- Time: 2026/02/16 20:06:01
+-- Database: db_test_1
+-- Database version: 19devel
+-- seed value: 1771234543431
+-- Oracle: NOREC
+\c test;
+DROP DATABASE IF EXISTS db_test_1;
+CREATE DATABASE db_test_1 ;
+\c db_test_1;
+CREATE TABLE t0(c0 integer  DEFAULT (+ (length(('+༆|B5༆x/' COLLATE "en_AU.utf8")))) UNIQUE) USING heap;
+CREATE TEMPORARY TABLE IF NOT EXISTS t1(c0 bigserial ) INHERITS(t0);
+CREATE TEMP TABLE IF NOT EXISTS t1(LIKE t0);
+CREATE TEMP TABLE t2(LIKE t0);
+CREATE TEMPORARY TABLE t3(c0 REAL  DEFAULT (0.08266552), c1 bigserial , CHECK(((((t3.c1) BETWEEN SYMMETRIC (length('0.08266552070272537')) AND (t3.c1))::VARCHAR(493))LIKE(upper(pg_current_logfile()))))) INHERITS(t2, t0) USING heap WITH (autovacuum_vacuum_cost_limit=3693, autovacuum_vacuum_cost_delay=28, autovacuum_analyze_scale_factor=0.1, autovacuum_freeze_min_age=635895810) ON COMMIT DELETE ROWS ;
+CREATE TABLE t3(LIKE t2);
+CREATE INDEX i0 ON ONLY t0 USING GIST(c0 ASC, c0, (((((((((B'1111111111111111111111111111111111010111000000000000111100000110')>>(B'1111111111111111111111111111111110111101000010100101101001000110')))&(((B'110010010110001111010111100111')&(B'110010010110001111010111100111')))))|(((((B'1111111111111111111111111111111111111110000110110100011101001011')#(B'1111111111111111111111111111111111010111000000000000111100000110')))#(((B'1111111111111111111111111111111110111101000010100101101001000110')#(B'10111010100011100011111000000')))))))<<(((bitor(((B'100101100110110011100111111101')<<(B'1111111000111000110111010111010')), ((B'1111111111111111111111111111111111111110000110110100011101001011')<<(B'1100100110010010101000111001011'))))#(((((B'100011000001011001010100111001')<<(B'1111111111111111111111111111111110111101000010100101101001000110')))#(((B'1111111111111111111111111111111110001000101000000100010010111110')#(B'1111111111111111111111111111111110011000000010100110111111011110')))))))))) WHERE (((((('#6S' COLLATE "en_IE.utf8") COLLATE "en_DK.utf8"))||(CAST(0.8902672 AS MONEY))))LIKE(lower(('cI' COLLATE "en_HK.utf8"))));
+CREATE UNIQUE INDEX i0 ON ONLY t0(c0 DESC) INCLUDE(c0);
+ANALYZE;
+UNLISTEN test;
+DISCARD TEMP;
+MERGE INTO t0 AS target USING t3 AS source ON ((((((('(-751888830,2029667897]'::int4range)-('(2050698322,2123316097]'::int4range)))+((('(-532680225,587568441)'::int4range)+('[-1171758392,2132569786]'::int4range)))))-((((('[-1123395002,-626159485)'::int4range)*('(-1903178249,1526177121]'::int4range)))*((('(1002810179,1695853583]'::int4range)+('[-520785630,1373753680]'::int4range)))))))::BOOLEAN WHEN MATCHED THEN DO NOTHING RETURNING NEW.c0;
+MERGE INTO t0 AS target USING t3 AS source ON NOT (((to_char(0.40030366, '-532680225') COLLATE "en_GB.utf8")) IS NOT NULL) WHEN MATCHED AND (CAST((btrim('-626159485') COLLATE "C") AS VARCHAR) SIMILAR TO lower(CAST(source.c0 AS VARCHAR(371)))) THEN DELETE WHEN NOT MATCHED AND FALSE THEN INSERT (c0) VALUES (source.c0) RETURNING OLD.c0;
+CREATE TABLESPACE tablespace1336666989 LOCATION '/tmp/postgresql/tablespace1336666989';
+MERGE INTO t0 AS target USING t3 AS source ON network_le('242.211.153.190', '149.25.242.252') WHEN MATCHED THEN UPDATE SET c0 = source.c0 RETURNING OLD.c0;
+DROP INDEX IF EXISTS i0 CASCADE;
+INSERT INTO t3(c0) VALUES(-1862126893);
+MERGE INTO t0 AS target USING t3 AS source ON ('cbbccefd-e4ac-436e-825d-ca0f70c81f34'::uuid)::BOOLEAN WHEN NOT MATCHED AND ((((('(-1136843506,2069097622]'::int4range)-('(-2073509856,-88297604]'::int4range)))-((('[-94150449,969755693]'::int4range)-('(-373059491,1695853583]'::int4range))))) IN ((((('[930102919,1249126426)'::int4range)+('(-1698773295,2123316097)'::int4range)))+((('(1299347349,2023237020]'::int4range)-('[-992926944,-326600431]'::int4range))))) THEN INSERT (c0) VALUES (abs(CAST((('0.08266552070272537')||(source.c0)) AS INT)));
+INSERT INTO t3(c0) VALUES(CAST((((((B'1111111111111111111111111111111110000100011010001100000000100000')&(B'1111111111111111111111111111111110101100010111100111001011010100')))#(((B'1111111111111111111111111111111110111101000010100101101001000110')|(B'1110101111110000111100100100'))))) BETWEEN SYMMETRIC (((((B'1111111111111111111111111111111111000001001101101111110001111101')#(B'1111111111111111111111111111111110011110000110111001000100011111')))||((-1136843506)::BIT(9)))) AND (((((B'1100100110010010101000111001011')|(B'1111111111111111111111111111111110001010010001100011101010101101')))|(((B'1000011101100110001110010100000')>>(B'1101101000011100111110101011110'))))) AS INT));
+INSERT INTO t0(c0) VALUES(846956536) ON CONFLICT  DO NOTHING;
+TRUNCATE TABLE t3 CONTINUE IDENTITY;
+SET SESSION cursor_tuple_fraction=DEFAULT;
+SET LOCAL constraint_exclusion=on;
+SET enable_hashjoin=1;
+DROP INDEX IF EXISTS i0 CASCADE;
+REINDEX TABLE t3;
+DELETE FROM t3 WHERE (((((((B'1111111111111111111111111111111110001000101000000100010010111110')<<(B'100000010010111111100011100001')))::VARCHAR(456))||((0.4580458)::MONEY)))LIKE(((CAST(0.050264546691911605 AS VARCHAR))||(0.10956983))));
+INSERT INTO t0(c0) VALUES(2050698322) RETURNING 0.5482533861325026;
+DROP INDEX IF EXISTS i2 CASCADE;
+COMMIT;
+SET SESSION statement_timeout = 5000;\n;
+
+[2026/02/16 20:06:02] Executed 1356 queries (144 queries/s; 0.20/s dbs, successful statements: 34%). Threads shut down: 2.
+[2026/02/16 20:06:07] Executed 1763 queries (81 queries/s; 0.40/s dbs, successful statements: 36%). Threads shut down: 2.
+java.lang.AssertionError: SELECT ALL * FROM ONLY t3, t1 JOIN ONLY t2 ON float48gt(btfloat8cmp(1236920270, -1.999181E9), sqrt(+ (-544450030))) WHERE t1.c1~*t2.c1
+	at sqlancer.common.query.SQLQueryAdapter.checkException(SQLQueryAdapter.java:166)
+	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:207)
+	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:177)
+	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:172)
+	at sqlancer.common.oracle.NoRECOracle.countRows(NoRECOracle.java:127)
+	at sqlancer.common.oracle.NoRECOracle.check(NoRECOracle.java:86)
+	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:61)
+	at sqlancer.Main$DBMSExecutor.run(Main.java:476)
+	at sqlancer.Main$2.run(Main.java:693)
+	at sqlancer.Main$2.runThread(Main.java:675)
+	at sqlancer.Main$2.run(Main.java:666)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.postgresql.util.PSQLException: ERROR: cannot take square root of a negative number
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2676)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2366)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:356)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:496)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:413)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:333)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:319)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:295)
+	at org.postgresql.jdbc.PgStatement.executeQuery(PgStatement.java:244)
+	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:196)
+	... 12 more
+--java.lang.AssertionError: SELECT ALL * FROM ONLY t3, t1 JOIN ONLY t2 ON float48gt(btfloat8cmp(1236920270, -1.999181E9), sqrt(+ (-544450030))) WHERE t1.c1~*t2.c1
+--	at sqlancer.common.query.SQLQueryAdapter.checkException(SQLQueryAdapter.java:166)
+--	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:207)
+--	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:177)
+--	at sqlancer.common.query.SQLQueryAdapter.executeAndGet(SQLQueryAdapter.java:172)
+--	at sqlancer.common.oracle.NoRECOracle.countRows(NoRECOracle.java:127)
+--	at sqlancer.common.oracle.NoRECOracle.check(NoRECOracle.java:86)
+--	at sqlancer.ProviderAdapter.generateAndTestDatabase(ProviderAdapter.java:61)
+--	at sqlancer.Main$DBMSExecutor.run(Main.java:476)
+--	at sqlancer.Main$2.run(Main.java:693)
+--	at sqlancer.Main$2.runThread(Main.java:675)
+--	at sqlancer.Main$2.run(Main.java:666)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+--	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+--	at java.base/java.lang.Thread.run(Thread.java:1583)
+--Caused by: org.postgresql.util.PSQLException: ERROR: cannot take square root of a negative number
+--	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2676)
+--	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2366)
+--	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:356)
+--	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:496)
+--	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:413)
+--	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:333)
+--	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:319)
+--	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:295)
+--	at org.postgresql.jdbc.PgStatement.executeQuery(PgStatement.java:244)
+--	at sqlancer.common.query.SQLQueryAdapter.internalExecuteAndGet(SQLQueryAdapter.java:196)
+--	... 12 more
+--
+-- Time: 2026/02/16 20:06:10
+-- Database: db_test_2
+-- Database version: 19devel
+-- seed value: 1771234543432
+-- Oracle: NOREC
+\c test;
+DROP DATABASE FORCE IF EXISTS db_test_2;
+DROP DATABASE IF EXISTS db_test_2;
+CREATE DATABASE db_test_2 WITH ENCODING 'utf8'  TEMPLATE template0;
+\c db_test_2;
+CREATE TEMP TABLE t0(c0 DECIMAL  NOT NULL) PARTITION BY LIST(((((((((('[-2140978359,524371730)'::int4range)*('(710716623,1577637559)'::int4range)))-('[-949706063,1321096739]'::int4range)))+((((('[-1229558197,-1070396790]'::int4range)+('[-2046420505,2084154670]'::int4range)))*((('[-154078261,739762451]'::int4range)*('[-1204568044,-903984819)'::int4range)))))))*(((((CAST('DmsIW\r更' AS int4range))+((('[-1181896979,1954804033]'::int4range)-('[-67360398,1613456260]'::int4range)))))*((((B'1101011110101011010100111000110')::int4range)*('[-892677516,1341800043)'::int4range)))))))) ON COMMIT PRESERVE ROWS ;
+CREATE TEMPORARY TABLE IF NOT EXISTS t0(c0 inet , c1 VARCHAR(65) );
+CREATE TABLE IF NOT EXISTS t1(LIKE t0);
+CREATE TEMP TABLE t2(c0 int4range  DEFAULT ((((((((('[951838101,1182267164)'::int4range)*('[69188982,1874790195)'::int4range)))*((('[-1722386089,-249936971)'::int4range)*('(-347843733,-131674555)'::int4range)))))*((((('[-605760517,1484446495)'::int4range)*('[-1633252067,-1224188850]'::int4range)))-((('[-868700372,1909932312]'::int4range)-('[-1972569616,-994082759]'::int4range)))))))*((((((('(-1764589719,-3229102)'::int4range)+('[1085857053,1518081410]'::int4range)))-((('[-1478971322,1278536868)'::int4range)+('(-874877748,519033435]'::int4range)))))+((((('[-1549743287,1943683544]'::int4range)*('(-1764589719,-1685513464)'::int4range)))*((('(-1673261805,-1052254962)'::int4range)+('[-159049920,1325107455]'::int4range))))))))) PRIMARY KEY NOT NULL UNIQUE CHECK ((t2.c0) BETWEEN SYMMETRIC (t2.c0) AND (t2.c0)), CHECK(CAST(((((1940777044)+(- (-2101680757))))^(CAST(0.02982430807810843 AS INT))) AS BOOLEAN)), FOREIGN KEY (c0) REFERENCES t1(c0) MATCH FULL ON DELETE NO ACTION NOT DEFERRABLE, UNIQUE(c0)) INHERITS(t0, t1) PARTITION BY HASH((((((((((B'1111111111111111111111111111111111111000001001001110111110010110')&(B'1110101110101111111100010111110')))&(((B'1111111111111111111111111111111111111111001011111010001011010000')&(B'10001010011111100010100000011')))))&(((B'1111111111111111111111111111111111101011001100000111001010111100')&(((B'1111110110111010101000101101100')||(B'1111111111111111111111111111111111110111101110110111000111111001')))))))|(((((((B'101111100010010100010111011011')>>(B'1000110011101111111011100011100')))||(((B'1111111111111111111111111111111111111000100111011011101011101011')>>(B'1011101010001010001011110100011')))))||(((CAST(1577653166 AS BIT))&(((B'1011001101001010010111111010100')|(B'1111111111111111111111111111111111100100111101111111010110110111')))))))))multirange_ops);
+CREATE TABLE IF NOT EXISTS t2(LIKE t0);
+CREATE UNLOGGED TABLE t3(LIKE t2 INCLUDING STORAGE);
+INSERT INTO t3(c0, c1) VALUES('99.206.174.156', lower((((']QWAO* ഓ䆛')||(1504131475)) COLLATE "en_US.utf8"))), ('31.120.175.156', (((CAST(((B'1011110001011000001010111000110')<<(B'1111111111111111111111111111111111011011110110101001011101001101')) AS VARCHAR) COLLATE "en_DK.utf8"))||(CAST(-1.5904992E8 AS MONEY)))), ('176.188.96.50', CAST(((int4range_canonical((('(-1979589844,1267744724]'::int4range)+('[-1328230984,1809164742)'::int4range))))-((((('[619099379,2004611874)'::int4range)*('(-1536561780,-786726510]'::int4range)))*((('(-224135049,1631630942)'::int4range)-('(-1673261805,842325759]'::int4range)))))) AS VARCHAR(752))), ('157.130.99.237', 'w1'), ('170.103.97.216', (((-1043530617) BETWEEN (CAST(0.9994056 AS INT)) AND (((1810830347)/(934))))::VARCHAR(514) COLLATE "en_DK.utf8")) RETURNING t3.c0;
+INSERT INTO t3(c0) VALUES('193.185.179.247') ON CONFLICT  DO NOTHING;
+RESET ROLE;
+LISTEN asdf;
+UNLISTEN *;
+DELETE FROM ONLY t1;
+SET LOCAL jit_optimize_above_cost=DEFAULT;
+CREATE MATERIALIZED VIEW v0(c0, c1, c2) AS (SELECT DISTINCT (('16.248.55.44')>=(t2.c0)), '4c4db702-0b0b-4d68-92f1-868d2eef5334'::uuid, 0.09072527719577028 FROM t1, t2 LIMIT 3706545116878862679 OFFSET 8216826243715712583);
+RESET ROLE;
+CREATE TABLESPACE tablespace534620129 LOCATION '/tmp/postgresql/tablespace534620129';
+ANALYZE;
+CREATE UNIQUE INDEX i0 ON ONLY t0 USING GIST((((((((CAST(t0.c0 AS int4range))*((('[-1555114253,236363703)'::int4range)-('[-1394336965,1244522564)'::int4range)))))*((((('(-869320197,-159049920]'::int4range)*('[-664178184,-376269283)'::int4range)))*((('[-2014010795,477567608]'::int4range)-('(-1833058139,325198182)'::int4range)))))))-((((((('(751949029,1977088190)'::int4range)+('[1680389647,1937085765)'::int4range)))-((('(-1558568042,-990871561]'::int4range)*('(290679385,1959480037)'::int4range)))))+((((('[467283726,796951195)'::int4range)-('[-1780252169,2143881544)'::int4range)))-((('[31758888,1702534755)'::int4range)+(NULL))))))))) DESC) INCLUDE(c1);
+CREATE UNIQUE INDEX i0 ON t0 USING BTREE(c1 ASC) WHERE ('819ee2da-3d44-477f-8d91-d1bfa3ba3f7e'::uuid) IN ('4e02867b-d99f-40b8-bc29-63f4a152fc5a'::uuid, 'd97aba82-e5db-4f1b-8980-7785a5cb4989'::uuid);
+CLUSTER t1;
+CLUSTER t3;
+CLUSTER ;
+CREATE STATISTICS  IF NOT EXISTS s0 (ndistinct) ON c1, c0 FROM t2;
+CREATE STATISTICS  s1 ON c0, c1 FROM t1;
+DISCARD SEQUENCES;
+INSERT INTO t2(c1) VALUES(CAST(0.5796705956707624 AS VARCHAR(761)));
+SET CONSTRAINTS ALL IMMEDIATE;
+DISCARD TEMP;
+DELETE FROM t1 RETURNING OLD.*;
+DELETE FROM ONLY t1;
+INSERT INTO t3(c0, c1) VALUES('61.29.122.196', '') RETURNING NEW.c0;
+DROP INDEX IF EXISTS i0 RESTRICT;
+TRUNCATE t3, t1, t2;
+MERGE INTO t3 AS target USING t2 AS source ON (source.c1 SIMILAR TO source.c1) WHEN NOT MATCHED THEN INSERT (c0, c1) VALUES ('223.156.99.103', source.c1);
+CREATE STATISTICS  s2 (mcv, dependencies) ON c1, c0 FROM t3;
+VACUUM FREEZE;
+MERGE INTO t2 AS target USING t1 AS source ON ((((((((repeat(source.c1, 1867863474))LIKE(source.c1)))AND((target.c0) BETWEEN SYMMETRIC ('177.175.22.78') AND ('69.138.222.122'))))AND(cash_ne(CAST(0.7684648 AS MONEY), CAST(-1.3167455E8 AS MONEY)))))OR((((target.c1 SIMILAR TO target.c1))OR(FALSE)))) WHEN MATCHED AND ((source.c1)LIKE(source.c1)) THEN DELETE WHEN NOT MATCHED THEN INSERT (c0) VALUES ('253.28.3.58');
+INSERT INTO t1(c1) VALUES(btrim((btboolcmp(FALSE, TRUE))::VARCHAR)), (((lower('') COLLATE "en_ZA.utf8") COLLATE "en_BW.utf8")), (((lower(('(-347843733,585819276]'::int4range)::VARCHAR))||((((((('(-1411093327,-742591709)'::int4range)-('(-1850965430,1959803971)'::int4range)))+((('[776340235,1348394219]'::int4range)-('(-742591709,882246678]'::int4range)))))+((((('(-1495834018,1833230393)'::int4range)-('[1897118312,9223372036854775807]'::int4range)))*((('(-1759634603,-917536986]'::int4range)+('(-1841524498,2143881544]'::int4range))))))))) RETURNING NEW.*;
+INSERT INTO t1(c1) VALUES(((((('e5acbfcc-49c0-47a8-a34b-e94af56fb09b'::uuid)::VARCHAR)||((0.17655616)::MONEY)))||(639123462)));
+INSERT INTO t1(c0) VALUES('165.217.65.185'), ('133.104.63.255'), ('3.176.119.139');
+COMMIT;
+SET SESSION statement_timeout = 5000;\n;
+
+[2026/02/16 20:06:12] Executed 2038 queries (55 queries/s; 0.20/s dbs, successful statements: 38%). Threads shut down: 3.
+[2026/02/16 20:06:17] Executed 4715 queries (535 queries/s; 0.00/s dbs, successful statements: 44%). Threads shut down: 3.
+[2026/02/16 20:06:22] Executed 7397 queries (536 queries/s; 0.00/s dbs, successful statements: 46%). Threads shut down: 3.
+[2026/02/16 20:06:27] Executed 9694 queries (459 queries/s; 0.00/s dbs, successful statements: 48%). Threads shut down: 3.
+[2026/02/16 20:06:32] Executed 12353 queries (531 queries/s; 0.00/s dbs, successful statements: 48%). Threads shut down: 3.
+[2026/02/16 20:06:37] Executed 15007 queries (530 queries/s; 0.00/s dbs, successful statements: 49%). Threads shut down: 3.
+Overall execution statistics
+============================
+       17k queries
+         5 databases
+       36k successfully-executed statements
+       36k unsuccessfully-executed statements

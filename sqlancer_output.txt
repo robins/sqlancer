@@ -1,0 +1,2 @@
+[INFO] Linux detected: Enabling tablespace testing by default
+[2026/02/17 04:15:22] Executed 1470 queries (293 queries/s; 0.80/s dbs, successful statements: 40%). Threads shut down: 0.

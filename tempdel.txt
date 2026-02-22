@@ -1,0 +1,56 @@
+--Caused by: org.postgresql.util.PSQLException: ERROR: 1276761953 is not a valid encoding code
+--Caused by: org.postgresql.util.PSQLException: ERROR: -1348708211 is not a valid encoding code
+--Caused by: org.postgresql.util.PSQLException: ERROR: 1866383202 is not a valid encoding code
+--Caused by: org.postgresql.util.PSQLException: ERROR: -2041599985 is not a valid encoding code
+--Caused by: org.postgresql.util.PSQLException: ERROR: '2p is not a valid encoding name
+--Caused by: org.postgresql.util.PSQLException: ERROR: -370 is not a valid encoding code
+--Caused by: org.postgresql.util.PSQLException: ERROR: 786409593 is not a valid encoding code
+--Caused by: org.postgresql.util.PSQLException: ERROR: aggregate function calls cannot contain set-returning function calls
+--Caused by: org.postgresql.util.PSQLException: ERROR: could not open directory "1861783233$0.08": No such file or directory
+--Caused by: org.postgresql.util.PSQLException: ERROR: could not open file "db0" for reading: No such file or directory
+--Caused by: org.postgresql.util.PSQLException: ERROR: could not open file "" for reading: No such file or directory
+--Caused by: org.postgresql.util.PSQLException: ERROR: database "-1433705118" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: foreign-data wrapper "﯐AND" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: foreign-data wrapper "OA" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: h is not a valid encoding name
+--Caused by: org.postgresql.util.PSQLException: ERROR: 돘I5%0 is not a valid encoding name
+--Caused by: org.postgresql.util.PSQLException: ERROR: improper relation name (too many dotted names): 15.186.90.195
+--Caused by: org.postgresql.util.PSQLException: ERROR: improper relation name (too many dotted names): 56.200.201.164
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid escape string
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid large-object descriptor: 1128303058
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid large-object descriptor: 904754405
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid preceding or following size in window function
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid range bound flags
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid size: "hQ"
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid type name ""
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid value for parameter "endoption": -964705246
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid value for parameter "n": 0
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid value for parameter "n": -330854612
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid value for parameter "start": 0
+--Caused by: org.postgresql.util.PSQLException: ERROR: invalid value for parameter "start": -993459817
+--Caused by: org.postgresql.util.PSQLException: ERROR:  is not a valid encoding name
+--Caused by: org.postgresql.util.PSQLException: ERROR: {[_ is not a valid encoding name
+--Caused by: org.postgresql.util.PSQLException: ERROR: language "-234206.129.41.150" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: lastval is not yet defined in this session
+--Caused by: org.postgresql.util.PSQLException: ERROR: log format "$0.10" is not supported
+--Caused by: org.postgresql.util.PSQLException: ERROR: log format "" is not supported
+--Caused by: org.postgresql.util.PSQLException: ERROR: 㔭M7UH is not a valid encoding name
+--Caused by: org.postgresql.util.PSQLException: ERROR: no partition of relation "t4" found for row
+--Caused by: org.postgresql.util.PSQLException: ERROR: pg_event_trigger_table_rewrite_reason() can only be called in a table_rewrite event trigger function
+--Caused by: org.postgresql.util.PSQLException: ERROR: recovery is not in progress
+--Caused by: org.postgresql.util.PSQLException: ERROR: requested length cannot be negative
+--Caused by: org.postgresql.util.PSQLException: ERROR: role "0.17022899" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: role "媮IB[LL" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: schema "0" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: schema "-1" does not exist
+--Caused by: org.postgresql.util.PSQLException: ERROR: syntax error at end of input
+--Caused by: org.postgresql.util.PSQLException: ERROR: tablespace "tablespace1131840454" already exists
+--Caused by: org.postgresql.util.PSQLException: ERROR: tablespace "tablespace1261520571" already exists
+--Caused by: org.postgresql.util.PSQLException: ERROR: "timeout" must not be negative
+--Caused by: org.postgresql.util.PSQLException: ERROR: transaction ID 18446744073709551597 is in the future
+--Caused by: org.postgresql.util.PSQLException: ERROR: transaction ID 721621246 is in the future
+--Caused by: org.postgresql.util.PSQLException: ERROR: unrecognized configuration parameter "$0.80"
+--Caused by: org.postgresql.util.PSQLException: ERROR: unrecognized configuration parameter ">.[J|V+V"
+--Caused by: org.postgresql.util.PSQLException: ERROR: unrecognized configuration parameter "lancer"
+--Caused by: org.postgresql.util.PSQLException: ERROR: unrecognized privilege type: ""
+--Caused by: org.postgresql.util.PSQLException: ERROR: unrecognized privilege type: "HI츸"

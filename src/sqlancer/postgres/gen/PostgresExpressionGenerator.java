@@ -146,6 +146,15 @@ public class PostgresExpressionGenerator implements ExpressionGenerator<Postgres
         supportedFunctions = supportedFunctions.stream()
                 .filter(f -> allowedFunctionTypes.contains(f.getVolatility()))
                 .collect(Collectors.toList());
+
+        // Blacklist non-deterministic functions
+        List<String> blacklistedFunctions = Arrays.asList("gen_random_uuid", "uuid_generate_v4", "random",
+                "timeofday", "clock_timestamp", "statement_timestamp", "txid_current", "pg_backend_pid",
+                "pg_export_snapshot", "uuidv7", "uuidv4");
+        supportedFunctions = supportedFunctions.stream()
+                .filter(f -> !blacklistedFunctions.contains(f.getName()))
+                .collect(Collectors.toList());
+
         if (!allowSetReturningFunctions) {
             supportedFunctions = supportedFunctions.stream().filter(f -> !f.returnsSet()).collect(Collectors.toList());
         }

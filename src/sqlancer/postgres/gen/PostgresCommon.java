@@ -158,7 +158,7 @@ public final class PostgresCommon {
         errors.add(Pattern.compile("invalid size: \"(?s).*\""));
         errors.add(Pattern.compile("invalid type name \"(?s).*\""));
         errors.add(Pattern.compile("invalid value for parameter \"(?s).*\": .*"));
-        errors.add(Pattern.compile("log format \"(?s).*\" is not supported"));
+        errors.add(Pattern.compile("log format \"(?s).*"));
         errors.add(Pattern.compile("no partition of relation \".*\" found for row"));
         errors.add(Pattern.compile("tablespace \".*\" already exists"));
         errors.add(Pattern.compile("transaction ID .* is in the future"));
@@ -243,6 +243,16 @@ public final class PostgresCommon {
         errors.add(Pattern.compile("ALTER TABLE / ADD CONSTRAINT USING INDEX is not supported on partitioned tables"));
         errors.add(Pattern.compile("aggregate function calls cannot contain set-returning function calls"));
         errors.add(Pattern.compile("foreign-data wrapper \"(?s).*\"")); // Catch-all for other FDW errors
+        
+        // Added aggregated errors from logs
+        errors.add(Pattern.compile("numeric field overflow"));
+        errors.add(Pattern.compile("regexp_count\\(\\) does not support the \"(?s).*\" option"));
+        errors.add(Pattern.compile("regexp_split_to_table\\(\\) does not support the \"(?s).*\" option"));
+        errors.add(Pattern.compile("cross-database references are not implemented: .*"));
+        errors.add(Pattern.compile("conflicting key value violates exclusion constraint \"(?s).*\""));
+        errors.add(Pattern.compile("database with OID .* does not exist"));
+        errors.add(Pattern.compile("cannot open relation \"(?s).*\""));
+        errors.add(Pattern.compile("could not write to file \"(?s).*\": No space left on device"));
         
         return errors;
     }

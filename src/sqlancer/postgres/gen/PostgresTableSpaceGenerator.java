@@ -15,9 +15,9 @@ public class PostgresTableSpaceGenerator {
     public PostgresTableSpaceGenerator(PostgresGlobalState globalState) {
         this.globalState = globalState;
         errors.addRegexString("ERROR: (?:tablespace )?directory \".*[\\\\/]tablespace\\d+\" does not exist");
-        errors.add("ERROR: already exists");
-        errors.add("ERROR: is not empty");
-        errors.add("ERROR: cannot be created because system does not support tablespaces");
+        errors.add("already exists");
+        errors.add("is not empty");
+        errors.add("cannot be created because system does not support tablespaces");
     }
 
     public static SQLQueryAdapter generate(PostgresGlobalState globalState) {
